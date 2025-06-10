@@ -1,0 +1,59 @@
+
+class Strut():
+	
+    def __init__(self, config: dict, strut_partial: list[int]):
+
+        self.config = config
+        self.strut_partial = strut_partial
+        self.strut = strut_partial[0:4]
+
+        self.d = display.Display()
+        self.root = self.d.screen().root
+
+        self.gwin = None
+        self.xwin = None
+
+        self.NET_WM_STRUT = self.d.intern_atom("_NET_WM_STRUT")
+        self.NET_WM_STRUT_PARTIAL = self.d.intern_atom("_NET_WM_STRUT_PARTIAL")
+        self.CARDINAL = self.d.intern_atom("CARDINAL")
+        self.NET_WM_DESKTOP = self.d.intern_atom("_NET_WM_DESKTOP")
+
+        self.NET_WM_WINDOW_TYPE = self.d.intern_atom("_NET_WM_WINDOW_TYPE")
+        self.NET_WM_WINDOW_TYPE_DOCK = self.d.intern_atom("_NET_WM_WINDOW_TYPE_DOCK")
+
+
+    def initGhostWin(self):
+
+        win = QMainWindow()
+
+        win.setGeometry(
+            0,
+            0,
+            1,
+            1
+        )
+
+        win.setFixedSize(1,1) 
+        win.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        win.setWindowOpacity(0)
+        style = "QMainWindow { background : transparent }"
+        win.setStyleSheet(style)
+        win.show()
+        return win  
+
+    def setup(self):
+
+        self.gwin = self.initGhostWin()
+        self.xwin = self.d.create_resource_object("window", self.gwin.winId())
+
+        self.xwin.change_property(self.NET_WM_STRUT, self.CARDINAL, 32, self.strut)
+        self.xwin.change_property(self.NET_WM_STRUT_PARTIAL, self.CARDINAL, 32, self.strut_partial)
+
+        self.xwin.change_property(self.NET_WM_WINDOW_TYPE, Xatom.ATOM, 32, [self.NET_WM_WINDOW_TYPE_DOCK])
+        self.d.flush()
+
+        self.gwin.activateWindow()
+
+    def close(self):
+        self.gwin.close()
+        self.xwin.destroy()
