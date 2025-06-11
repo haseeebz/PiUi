@@ -1,11 +1,12 @@
 
 
-from PySide6.QtWidgets import QMainWindow, QFrame, QHBoxLayout
+from PySide6.QtWidgets import QFrame, QHBoxLayout
 from PySide6.QtCore import Qt
 from typing import Tuple
 
-from ..window.xstrut import Strut
-from ..widgets.widget import PiWidget
+from .xstrut import Strut
+from PiUi.components.widgets.widget import PiWidget
+from PiUi.core.utils.helper import enforceType
 
 class PiWindow():
 
@@ -39,17 +40,19 @@ class PiWindow():
         layout = QHBoxLayout()
         layout.setContentsMargins(0,0,0,0)
         
+        enforceType(rootWidget, PiWidget, "rootWidget")
         if rootWidget:
-                    layout.addWidget(rootWidget._qt___)
+            layout.addWidget(rootWidget._qt___)
 
         self._qt___.setLayout(layout)
         self._qt___.setContentsMargins(0,0,0,0)
 
+        enforceType(strut, (Strut, type(None)), "strut")
         self.strut = strut
         if strut:
             self.strut.setup()
 
-        
+
 
     def showExplicit(self, t: bool):
         if t:

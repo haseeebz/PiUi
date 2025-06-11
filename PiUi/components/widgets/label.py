@@ -4,7 +4,7 @@ from .widget import PiWidget
 from PiUi.core.utils.bind import Binding
 from PiUi.core.utils.poll import Poll
 from PiUi.core.utils.alignment import Alignment
-from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QLabel, QHBoxLayout
 
 
 class PiLabel(PiWidget):
@@ -29,4 +29,6 @@ class PiLabel(PiWidget):
                 text
             )
         
-        
+        self._qt___.setLayout(QHBoxLayout())
+
+

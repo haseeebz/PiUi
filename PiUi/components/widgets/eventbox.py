@@ -6,9 +6,10 @@ from .widget import PiWidget
 from PiUi.core.utils.bind import Binding
 from PiUi.core.utils.poll import Poll
 from PiUi.core.utils.alignment import Alignment
+from PiUi.core.utils.helper import enforceType
 from PySide6.QtWidgets import QHBoxLayout
 
-from ..helpers import CustomEventWidget
+from PiUi.components.helpers import CustomEventWidget
 
 
 class PiEventBox(PiWidget):
@@ -79,11 +80,23 @@ class PiEventBox(PiWidget):
             )
 
 
-        self.layout = QHBoxLayout()
-        self._qt___.setLayout(self.layout)
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0,0,0,0)
+        self._qt___.setLayout(layout)
         self._qt___.setContentsMargins(0,0,0,0)
 
+        enforceType(widget, [PiWidget, Binding, type(None)], "widget")
         if widget:
-            self.layout.addWidget(widget._qt___)
+                self.applyAttribute(
+                    self.setWidgets,
+                    widget
+                )
 
+
+    def setWidgets(self, widget: PiWidget):
+        self._qt___.layout().addWidget(
+            widget._qt___, 
+            alignment= (widget.hAlign.value | widget.vAlign.value)
+            )
+        
 

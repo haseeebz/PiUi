@@ -1,11 +1,14 @@
 
 from typing import Literal
 from .widget import PiWidget
+
+from PiUi.components.helpers import clearLayout
 from PiUi.core.utils.bind import Binding
 from PiUi.core.utils.poll import Poll
 from PiUi.core.utils.alignment import Alignment
+from PiUi.core.utils.helper import enforceType
+
 from PySide6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
     QVBoxLayout,
     QFrame
@@ -34,24 +37,38 @@ class PiBox(PiWidget):
         self._qt___: QFrame
         
         if orientation == "horizontal":
-            self.layout = QHBoxLayout()
+            layout = QHBoxLayout()
         elif orientation == "vertical":
-            self.layout = QVBoxLayout()
+            layout = QVBoxLayout()
         else:
             print("Incorrect or Left out orientation for PiBox!\nDefaulting to horizontal.")
-            self.layout = QHBoxLayout()
+            layout = QHBoxLayout()
         
-        self._qt___.setLayout(self.layout)
-        self.layout.setContentsMargins(0,0,0,0)
-
-
-        if widgets:
-            for widget in widgets:
-                self.layout.addWidget(widget._qt___, alignment= (widget.hAlign.value | widget.vAlign.value))
-        
+        layout.setContentsMargins(0,0,0,0)
+        self._qt___.setLayout(layout)
+        self._qt___.setContentsMargins(0,0,0,0)
 
         if spacing:
             self.applyAttribute(
-                self.layout.setSpacing,
+                self._qt___.layout().setSpacing,
                 spacing
             )
+        
+        enforceType(widgets, (list, Binding, type(None)), "widgets")
+        if widgets:
+            self.applyAttribute(
+                self.setWidgets,
+                widgets
+            )
+
+    def setWidgets(self, widgets: list[PiWidget]):
+        layout = self._qt___.layout()
+        clearLayout(layout)
+        if widgets:
+            for widget in widgets:
+                self._qt___.layout().addWidget(
+                    widget._qt___, 
+                    alignment= (widget.hAlign.value | widget.vAlign.value)
+                    )
+        
+    

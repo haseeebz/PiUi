@@ -1,9 +1,9 @@
 
-from PySide6.QtWidgets import QFrame
+from PySide6.QtWidgets import QFrame, QHBoxLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
 from typing import Callable, Tuple
-from ..core.app import Screen
+from PiUi.core import Screen
 
 
 class CustomEventWidget(QFrame):
@@ -106,3 +106,23 @@ def evalBarSize(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
     else:
         print("Incorrect Position for PiBar, Defaulting to Bottom.")
         return sizes["bottom"]
+
+
+def clearLayout(layout: QHBoxLayout):
+
+    if layout is None:
+        return
+    
+    while layout.count():
+
+        item = layout.itemAt(0)
+
+        widget = item.widget()
+        if widget is not None:
+            widget.setParent(None)
+        else:
+            layout = item.layout()
+            if layout:
+                clearLayout(layout)
+
+

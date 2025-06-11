@@ -1,31 +1,35 @@
 
 
-
-
-import sys
-from typing import Tuple
-
-
 from PySide6.QtWidgets import (
 	QApplication
 )
+
+from .utils import Binder, Poller, Timer
+import sys
+from typing import Callable, Tuple
 
 
 class AppCore():
 
 	def __init__(self):
-		self.__app = QApplication(sys.argv)
+
+		self._app___ = QApplication(sys.argv)
 		self.stylesheet: str = None
-		self.screen = Screen(self.__app)
+
+		self.screen = Screen(self._app___)
+
+		self.binder = Binder()
+		self.poller = Poller()
+		self.Timer = Timer
 
 	def run(self):
-		sys.exit(self.__app.exec())
+		sys.exit(self._app___.exec())
 
-	def applyStyleSheet(self, style_path: str):
+	def setStyleSheet(self, style_path: str):
 		try:
 			with open(style_path) as file:
 				self.stylesheet = file.read()
-			self.__app.setStyleSheet(self.stylesheet)
+			self._app___.setStyleSheet(self.stylesheet)
 		except FileNotFoundError:
 			print(f"Stylesheet file not found: {style_path}")
 

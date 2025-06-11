@@ -1,7 +1,7 @@
 
 
 from typing import Callable
-
+from .helper import enforceType
 
 class Binder():
 	
@@ -20,6 +20,7 @@ class Binder():
 class Binding():
 	def __init__(self):
 		self.setter: Callable = None
+		self.type = None
 	
 	def bind(self, setter: Callable):
 		self.setter = setter
