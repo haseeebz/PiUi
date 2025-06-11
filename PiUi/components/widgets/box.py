@@ -1,11 +1,14 @@
 
 from typing import Literal
 from .widget import PiWidget
-from PiUi.core.utils import Binding, Poll, Alignment
+from PiUi.core.utils.bind import Binding
+from PiUi.core.utils.poll import Poll
+from PiUi.core.utils.alignment import Alignment
 from PySide6.QtWidgets import (
     QWidget,
     QHBoxLayout,
-    QVBoxLayout
+    QVBoxLayout,
+    QFrame
 )
 
 
@@ -15,20 +18,20 @@ class PiBox(PiWidget):
     
     def __init__(
         self,
-        *,
         name: str | Binding | Poll | None = None,
-        orientation: Literal["horizontal", "vertical"] | None,
+        orientation: Literal["horizontal", "vertical"] | None = "horizontal",
+        widgets: list[PiWidget] | Binding | None = None,
+        *,
         spacing: int | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
-        widgets: list[PiWidget] | Binding | None = None,
         hAlign: Alignment.H | None = Alignment.H.center,
         vAlign: Alignment.V | None = Alignment.V.center,
         state: str | Binding | Poll | None = None
         ):
 
-        super().__init__(QWidget, name, height, width, hAlign, vAlign, state)
-        self.qt: QWidget
+        super().__init__(QFrame, name, height, width, hAlign, vAlign, state)
+        self.__qt___: QWidget
         
         if orientation == "horizontal":
             self.layout = QHBoxLayout()
@@ -38,13 +41,13 @@ class PiBox(PiWidget):
             print("Incorrect or Left out orientation for PiBox!\nDefaulting to horizontal.")
             self.layout = QHBoxLayout()
         
-        self.qt.setLayout(self.layout)
+        self.__qt___.setLayout(self.layout)
         self.layout.setContentsMargins(0,0,0,0)
 
 
         if widgets:
             for widget in widgets:
-                self.layout.addWidget(widget.qt, alignment= (widget.hAlign.value | widget.vAlign.value))
+                self.layout.addWidget(widget.__qt___, alignment= (widget.hAlign.value | widget.vAlign.value))
         
 
         if spacing:

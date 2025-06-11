@@ -8,7 +8,7 @@ class Binder():
 	def __init__(self):
 		self.bindings: dict[str, Binding] = {}
 
-	def bind(self, key: str):
+	def Bind(self, key: str):
 		binding = Binding()
 		self.bindings[key] = binding
 		return binding

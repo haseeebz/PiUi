@@ -10,9 +10,9 @@ from Xlib import display, Xatom
 
 class Strut():
 	
-    def __init__(self, strut: Tuple[int, int, int, int], screen: Tuple[int, int]):
+    def __init__(self, strut: Tuple[int, int, int, int], screen):
         
-        self.screenHeight, self.screenWidth = screen
+        self.screenHeight, self.screenWidth = screen.y, screen.x
 
         self.strut = strut
 

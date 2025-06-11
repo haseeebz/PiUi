@@ -1,7 +1,9 @@
 
 
 from typing import Callable
-from PiUi.core.utils import Binding, Poll, Alignment
+from PiUi.core.utils.bind import Binding
+from PiUi.core.utils.poll import Poll
+from PiUi.core.utils.alignment import Alignment
 from PySide6.QtWidgets import QWidget
 
 
@@ -17,23 +19,24 @@ class PiWidget():
         vAlign: Alignment.V | None = Alignment.V.center,
         state: str = None
         ):
-        self.qt: QWidget = qt()
+
+        self.__qt__: QWidget = qt()
         
         if name:
             self.applyAttribute(
-                self.qt.setObjectName,
+                self.__qt__.setObjectName,
                 name
             )
 
         if height:
             self.applyAttribute(
-                self.qt.setFixedHeight,
+                self.__qt__.setFixedHeight,
                 height
             )
             
         if width:
             self.applyAttribute(
-                self.qt.setFixedWidth,
+                self.__qt__.setFixedWidth,
                 width
             )
         
@@ -48,9 +51,9 @@ class PiWidget():
 
 
     def setState(self, value:str):
-        self.qt.setProperty("state", value)
-        self.qt.style().unpolish(self.qt)
-        self.qt.style().polish(self.qt)
+        self.__qt__.setProperty("state", value)
+        self.__qt__.style().unpolish(self.qt)
+        self.__qt__.style().polish(self.qt)
 
 
     def applyAttribute(self, setter: Callable, value):
@@ -58,5 +61,6 @@ class PiWidget():
             value.bind(setter)
         else:
             setter(value)
+
 
 

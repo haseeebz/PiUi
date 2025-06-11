@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 main.py
 style.qss
+tools.py

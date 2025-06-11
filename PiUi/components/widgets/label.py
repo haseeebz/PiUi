@@ -1,7 +1,9 @@
 
 
 from .widget import PiWidget
-from PiUi.core.utils import Binding, Poll, Alignment
+from PiUi.core.utils.bind import Binding
+from PiUi.core.utils.poll import Poll
+from PiUi.core.utils.alignment import Alignment
 from PySide6.QtWidgets import QLabel
 
 
