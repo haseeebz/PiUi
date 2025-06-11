@@ -31,7 +31,7 @@ class PiBox(PiWidget):
         ):
 
         super().__init__(QFrame, name, height, width, hAlign, vAlign, state)
-        self.__qt___: QWidget
+        self._qt___: QFrame
         
         if orientation == "horizontal":
             self.layout = QHBoxLayout()
@@ -41,13 +41,13 @@ class PiBox(PiWidget):
             print("Incorrect or Left out orientation for PiBox!\nDefaulting to horizontal.")
             self.layout = QHBoxLayout()
         
-        self.__qt___.setLayout(self.layout)
+        self._qt___.setLayout(self.layout)
         self.layout.setContentsMargins(0,0,0,0)
 
 
         if widgets:
             for widget in widgets:
-                self.layout.addWidget(widget.__qt___, alignment= (widget.hAlign.value | widget.vAlign.value))
+                self.layout.addWidget(widget._qt___, alignment= (widget.hAlign.value | widget.vAlign.value))
         
 
         if spacing:

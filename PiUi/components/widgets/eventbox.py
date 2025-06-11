@@ -15,14 +15,14 @@ class PiEventBox(PiWidget):
     
     def __init__(
         self,
-        *,
         name: str | Binding | Poll | None = None,
+        widget: PiWidget | Binding | None = None,
+        *,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = Alignment.H.center,
         vAlign: Alignment.V | None = Alignment.V.center,
         state: str | Binding | Poll | None = None,
-        widget: PiWidget | Binding | None = None,
         onRightClick: Callable | Binding | Poll | None = None,
         onLeftClick: Callable | Binding | Poll | None = None,
         onMiddleClick: Callable | Binding | Poll | None = None,
@@ -33,57 +33,57 @@ class PiEventBox(PiWidget):
         ):
 
         super().__init__(CustomEventWidget, name, height, width, hAlign, vAlign, state)
-        self.qt: CustomEventWidget
+        self._qt___: CustomEventWidget
 
         
         if onRightClick:
             self.applyAttribute(
-                self.qt.connectRightClick,
+                self._qt___.connectRightClick,
                 onRightClick
             )
 
         if onLeftClick:
             self.applyAttribute(
-                self.qt.connectLeftClick,
+                self._qt___.connectLeftClick,
                 onLeftClick
             )
 
         if onMiddleClick:
             self.applyAttribute(
-                self.qt.connectMiddleClick,
+                self._qt___.connectMiddleClick,
                 onMiddleClick
             )
 
         if onMouseRelease:
             self.applyAttribute(
-                self.qt.connectMouseRelease,
+                self._qt___.connectMouseRelease,
                 onMouseRelease
             )
 
         if onDoubleClick:
             self.applyAttribute(
-                self.qt.connectDoubleClick,
+                self._qt___.connectDoubleClick,
                 onDoubleClick
             )
 
         if onMouseEnter:
             self.applyAttribute(
-                self.qt.connectMouseEnter,
+                self._qt___.connectMouseEnter,
                 onMouseEnter
             )
 
         if onMouseLeave:
             self.applyAttribute(
-                self.qt.connectMouseLeave,
+                self._qt___.connectMouseLeave,
                 onMouseLeave
             )
 
 
         self.layout = QHBoxLayout()
-        self.qt.setLayout(self.layout)
-        self.qt.setContentsMargins(0,0,0,0)
+        self._qt___.setLayout(self.layout)
+        self._qt___.setContentsMargins(0,0,0,0)
 
         if widget:
-            self.layout.addWidget(widget.qt)
+            self.layout.addWidget(widget._qt___)
 
 

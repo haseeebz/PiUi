@@ -13,8 +13,8 @@ class PiButton(PiWidget):
 
     def __init__(
         self,
-        *,
         name: str | Binding | Poll | None = None,
+        *,
         text: str | Binding | None = None,
         onClick: Callable | Binding | None = None,
         onRelease: Callable | None = None,
@@ -26,23 +26,23 @@ class PiButton(PiWidget):
     ):
 
         super().__init__(QPushButton, name, height, width, hAlign, vAlign, state)
-        self.qt : QPushButton
+        self._qt___ : QPushButton
     
         if text:
             self.applyAttribute(
-                self.qt.setText,
+                self._qt___.setText,
                 text
             )
 
         if onClick:
             self.applyAttribute(
-                self.qt.clicked.connect,
+                self._qt___.clicked.connect,
                 onClick
             )
 
         if onRelease:
             self.applyAttribute(
-                self.qt.released.connect,
+                self._qt___.released.connect,
                 onRelease
             )
 

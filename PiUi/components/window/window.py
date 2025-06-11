@@ -4,8 +4,8 @@ from PySide6.QtWidgets import QMainWindow, QFrame, QHBoxLayout
 from PySide6.QtCore import Qt
 from typing import Tuple
 
-from .xstrut import Strut
-
+from ..window.xstrut import Strut
+from ..widgets.widget import PiWidget
 
 class PiWindow():
 
@@ -15,39 +15,57 @@ class PiWindow():
         *,
         position: Tuple[int, int],
         size: Tuple[int, int],
+        rootWidget: PiWidget = None,
         strut: Strut = None
         ):
 
-        self.__qt__: QFrame = QFrame()
+        self._qt___: QFrame = QFrame()
 
-        self.__qt__.setGeometry(*position, *size)
-        self.__qt__.setFixedSize(*size)
+        self._qt___.setGeometry(*position, *size)
+        self._qt___.setFixedSize(*size)
         
-        self.__qt__.setWindowFlags(
+        self._qt___.setWindowFlags(
             Qt.WindowType.BypassWindowManagerHint |
             Qt.WindowType.Tool |
-            Qt.WindowType.FramelessWindowHint
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.Desktop |
+            Qt.WindowType.WindowStaysOnBottomHint |
+            Qt.WindowType.Widget
         )
 
         if name:
-            self.__qt__.setObjectName(name)
+            self._qt___.setObjectName(name)
 
         layout = QHBoxLayout()
         layout.setContentsMargins(0,0,0,0)
-
-        self.__qt__.setLayout(layout)
-        self.__qt__.setContentsMargins(0,0,0,0)
-
-        if strut:
-            self.strut = strut
-            strut.setup()
-
-    def root(self, rootWidget):
-        self.__qt__.layout().addWidget(rootWidget)
-
-    def show(self, t: bool):
-        if t:
-            self.__qt___.show()
-        else:
-            self.__qt___.hide()
         
+        if rootWidget:
+                    layout.addWidget(rootWidget._qt___)
+
+        self._qt___.setLayout(layout)
+        self._qt___.setContentsMargins(0,0,0,0)
+
+        self.strut = strut
+        if strut:
+            self.strut.setup()
+
+        
+
+    def showExplicit(self, t: bool):
+        if t:
+            self._qt___.show()
+            if self.strut: self.strut.show()
+        else:
+            self._qt___.hide()
+            if self.strut: self.strut.hide()
+        
+    def show(self):
+        if self._qt___.isHidden():
+            self.showExplicit(True)
+        else:
+            self.showExplicit(False)
+            
+    def close(self):
+        if self.strut:
+            self.strut.close()
+        self._qt___.close()

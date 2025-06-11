@@ -10,9 +10,9 @@ from PySide6.QtWidgets import QLabel
 class PiLabel(PiWidget):
     def __init__(
         self,
-        *,
         name: str | Binding | Poll | None = None,
         text: str | Binding | Poll | None = None,
+        *,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = Alignment.H.center,
@@ -21,11 +21,11 @@ class PiLabel(PiWidget):
     ):
         
         super().__init__(QLabel, name, height, width, hAlign, vAlign, state)
-        self.qt: QLabel
+        self._qt___: QLabel
 
         if text:
             self.applyAttribute(
-                self.qt.setText,
+                self._qt___.setText,
                 text
             )
         

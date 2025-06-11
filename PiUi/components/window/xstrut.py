@@ -81,4 +81,9 @@ class Strut():
         self.gwin.close()
         self.xwin.destroy()
 
+    def show(self):
+        self.gwin.show()
+    
+    def hide(self):
+        self.gwin.hide()
 

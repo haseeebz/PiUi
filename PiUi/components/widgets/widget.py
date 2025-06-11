@@ -20,23 +20,23 @@ class PiWidget():
         state: str = None
         ):
 
-        self.__qt__: QWidget = qt()
+        self._qt___: QWidget = qt()
         
         if name:
             self.applyAttribute(
-                self.__qt__.setObjectName,
+                self._qt___.setObjectName,
                 name
             )
 
         if height:
             self.applyAttribute(
-                self.__qt__.setFixedHeight,
+                self._qt___.setFixedHeight,
                 height
             )
             
         if width:
             self.applyAttribute(
-                self.__qt__.setFixedWidth,
+                self._qt___.setFixedWidth,
                 width
             )
         
@@ -51,9 +51,9 @@ class PiWidget():
 
 
     def setState(self, value:str):
-        self.__qt__.setProperty("state", value)
-        self.__qt__.style().unpolish(self.qt)
-        self.__qt__.style().polish(self.qt)
+        self._qt___.setProperty("state", value)
+        self._qt___.style().unpolish(self._qt___)
+        self._qt___.style().polish(self._qt___)
 
 
     def applyAttribute(self, setter: Callable, value):

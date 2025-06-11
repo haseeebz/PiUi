@@ -2,7 +2,8 @@
 from PySide6.QtWidgets import QFrame
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
-from typing import Callable
+from typing import Callable, Tuple
+from ..core.app import Screen
 
 
 class CustomEventWidget(QFrame):
@@ -70,3 +71,38 @@ class CustomEventWidget(QFrame):
     def connectMouseLeave(self, func: Callable):
         self.mouseLeave = func
 
+
+
+
+        
+
+
+def evalBarPosition(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
+    
+    positions = {
+        "top" : (0, 0),
+        "bottom" : (0, screen.y - size),
+        "left" : (0, 0),
+        "right" : (screen.x - size, 0)
+    }
+
+    if position in positions:
+        return positions[position]
+    else:
+        print("Incorrect Position for PiBar, Defaulting to Bottom.")
+        return positions["bottom"]
+
+def evalBarSize(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
+
+    sizes = {
+        "top" : (screen.x , size),
+        "bottom" : (screen.x, size),
+        "left" : (size, screen.y),
+        "right" : (size, screen.y)
+    }
+
+    if position in sizes:
+        return sizes[position]
+    else:
+        print("Incorrect Position for PiBar, Defaulting to Bottom.")
+        return sizes["bottom"]
