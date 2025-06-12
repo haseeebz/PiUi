@@ -23,7 +23,7 @@ class PiBar(PiWindow):
         
         enforceType(widget, (PiWidget, type(None)), "rootWidget")
         super().__init__(
-            name, 
+            name = name, 
             position = evalBarPosition(side, size, screen), 
             size = evalBarSize(side, size, screen) , 
             strut = strut,
