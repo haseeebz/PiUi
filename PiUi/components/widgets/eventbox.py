@@ -3,10 +3,10 @@
 
 from typing import Callable
 from .widget import PiWidget
-from PiUi.core.utils.bind import Binding
-from PiUi.core.utils.poll import Poll
-from PiUi.core.utils.alignment import Alignment
-from PiUi.core.utils.helper import enforceType
+from PiUi.app.utils.binder import Binding
+from PiUi.app.utils.poller import Poll
+from PiUi.app.utils import Alignment
+from PiUi.app.utils.helper import enforceType
 from PySide6.QtWidgets import QHBoxLayout
 
 from PiUi.components.helpers import CustomEventWidget
@@ -16,9 +16,9 @@ class PiEventBox(PiWidget):
     
     def __init__(
         self,
+        *,
         name: str | Binding | Poll | None = None,
         widget: PiWidget | Binding | None = None,
-        *,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = Alignment.H.center,
@@ -85,7 +85,7 @@ class PiEventBox(PiWidget):
         self._qt___.setLayout(layout)
         self._qt___.setContentsMargins(0,0,0,0)
 
-        enforceType(widget, [PiWidget, Binding, type(None)], "widget")
+        enforceType(widget, (PiWidget, Binding, type(None)), "widget")
         if widget:
                 self.applyAttribute(
                     self.setWidgets,

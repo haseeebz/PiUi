@@ -3,10 +3,10 @@ from typing import Literal
 from .widget import PiWidget
 
 from PiUi.components.helpers import clearLayout
-from PiUi.core.utils.bind import Binding
-from PiUi.core.utils.poll import Poll
-from PiUi.core.utils.alignment import Alignment
-from PiUi.core.utils.helper import enforceType
+from PiUi.app.utils.binder import Binding
+from PiUi.app.utils.poller import Poll
+from PiUi.app.utils import Alignment
+from PiUi.app.utils.helper import enforceType
 
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -21,10 +21,10 @@ class PiBox(PiWidget):
     
     def __init__(
         self,
+        *,
         name: str | Binding | Poll | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
         widgets: list[PiWidget] | Binding | None = None,
-        *,
         spacing: int | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,

@@ -6,14 +6,14 @@ from typing import Tuple
 
 from .xstrut import Strut
 from PiUi.components.widgets.widget import PiWidget
-from PiUi.core.utils.helper import enforceType
+from PiUi.app.utils.helper import enforceType
 
 class PiWindow():
 
     def __init__(
         self,
-        name: str | None,
         *,
+        name: str | None = None,
         position: Tuple[int, int],
         size: Tuple[int, int],
         rootWidget: PiWidget = None,
@@ -40,7 +40,7 @@ class PiWindow():
         layout = QHBoxLayout()
         layout.setContentsMargins(0,0,0,0)
         
-        enforceType(rootWidget, PiWidget, "rootWidget")
+        enforceType(rootWidget, (PiWidget, type(None)), "rootWidget")
         if rootWidget:
             layout.addWidget(rootWidget._qt___)
 
@@ -51,7 +51,7 @@ class PiWindow():
         self.strut = strut
         if strut:
             self.strut.setup()
-
+            self.strut.hide()
 
 
     def showExplicit(self, t: bool):

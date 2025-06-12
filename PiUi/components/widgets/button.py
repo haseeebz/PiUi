@@ -3,9 +3,9 @@
 
 from typing import Callable
 from .widget import PiWidget
-from PiUi.core.utils.bind import Binding
-from PiUi.core.utils.poll import Poll
-from PiUi.core.utils.alignment import Alignment
+from PiUi.app.utils.binder import Binding
+from PiUi.app.utils.poller import Poll
+from PiUi.app.utils import Alignment
 from PySide6.QtWidgets import QPushButton
 
     
@@ -13,8 +13,8 @@ class PiButton(PiWidget):
 
     def __init__(
         self,
-        name: str | Binding | Poll | None = None,
         *,
+        name: str | Binding | Poll | None = None,
         text: str | Binding | None = None,
         onClick: Callable | Binding | None = None,
         onRelease: Callable | None = None,

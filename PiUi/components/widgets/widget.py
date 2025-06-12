@@ -1,9 +1,9 @@
 
 
 from typing import Callable
-from PiUi.core.utils.bind import Binding
-from PiUi.core.utils.poll import Poll
-from PiUi.core.utils.alignment import Alignment
+from PiUi.app.utils.binder import Binding
+from PiUi.app.utils.poller import Poll
+from PiUi.app.utils import Alignment
 from PySide6.QtWidgets import QWidget
 
 
@@ -48,6 +48,8 @@ class PiWidget():
                 self.setState,
                 state
             )
+
+        self._qt___.setContentsMargins(0,0,0,0)
 
 
     def setState(self, value:str):

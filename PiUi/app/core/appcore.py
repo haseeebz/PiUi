@@ -1,10 +1,10 @@
 
-
 from PySide6.QtWidgets import (
 	QApplication
 )
 
-from .utils import Binder, Poller, Timer
+from PiUi.app.utils import Binder, Poller, Timer
+from .screen import Screen
 import sys
 from typing import Callable, Tuple
 
@@ -33,10 +33,3 @@ class AppCore():
 		except FileNotFoundError:
 			print(f"Stylesheet file not found: {style_path}")
 
-
-class Screen():
-
-	def __init__(self, app: QApplication):
-		self.pair: Tuple[int, int] = app.primaryScreen().size().toTuple()
-		self.x: int = self.pair[0]
-		self.y: int	= self.pair[1]

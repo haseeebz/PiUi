@@ -1,1 +1,0 @@
-from .appcore import AppCore, Screen

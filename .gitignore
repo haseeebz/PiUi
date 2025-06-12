@@ -4,4 +4,8 @@ __pycache__/
 *.pyc
 main.py
 style.qss
+app.py
 tools.py
+widgets.py
+bar.qss
+todo

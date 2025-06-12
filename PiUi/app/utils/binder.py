@@ -1,7 +1,7 @@
 
 
 from typing import Callable
-from .helper import enforceType
+
 
 class Binder():
 	
