@@ -16,6 +16,12 @@ class Binder():
 	def update(self, key: str, value):
 		self.bindings[key].setter(value)
 
+	def combine(self, other: "Binder"):
+		for key, value in other.bindings.items():
+			self.bindings[key] = value
+		return self
+
+
 
 class Binding():
 	def __init__(self):
@@ -24,4 +30,3 @@ class Binding():
 	
 	def bind(self, setter: Callable):
 		self.setter = setter
-
