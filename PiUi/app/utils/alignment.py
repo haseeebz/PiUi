@@ -1,6 +1,7 @@
 from PySide6.QtCore import Qt
 from enum import Enum
 
+
 class Alignment:
     class H(Enum):
         left = Qt.AlignmentFlag.AlignLeft
@@ -11,3 +12,4 @@ class Alignment:
         top = Qt.AlignmentFlag.AlignTop
         bottom = Qt.AlignmentFlag.AlignBottom
         center = Qt.AlignmentFlag.AlignVCenter
+

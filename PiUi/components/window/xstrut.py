@@ -1,20 +1,15 @@
 
+from typing import Tuple
+from Xlib import Xatom, display
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtCore import Qt
-from typing import Tuple
-
-from Xlib import display, Xatom
-
-
 
 
 class Strut():
 	
     def __init__(self, strut: Tuple[int, int, int, int], screen):
         
-        self.screenHeight, self.screenWidth = screen.y, screen.x
-
-        self.strut = strut
+        self.strut_main = strut
 
         self.strut_partial = [
             *strut,
@@ -24,66 +19,9 @@ class Strut():
             0,0
         ]
 
-        #automatically assigns strut_partial based on user arg. bruh.
+        #automatically assigns strut_partial based on user arg. 
         for i in range(4):
-            if self.strut[i] != 0:
-                self.strut_partial[5+(i*2)] = self.screenHeight if i > 2 else self.screenWidth
+            if self.strut_main[i] != 0:
+                self.strut_partial[5+(i*2)] = screen.y if i > 2 else screen.x
 
-
-        self.d = display.Display()
-        self.root = self.d.screen().root
-
-        self.gwin = None
-        self.xwin = None
-
-        self.NET_WM_STRUT = self.d.intern_atom("_NET_WM_STRUT")
-        self.NET_WM_STRUT_PARTIAL = self.d.intern_atom("_NET_WM_STRUT_PARTIAL")
-        self.CARDINAL = self.d.intern_atom("CARDINAL")
-        self.NET_WM_DESKTOP = self.d.intern_atom("_NET_WM_DESKTOP")
-
-        self.NET_WM_WINDOW_TYPE = self.d.intern_atom("_NET_WM_WINDOW_TYPE")
-        self.NET_WM_WINDOW_TYPE_DOCK = self.d.intern_atom("_NET_WM_WINDOW_TYPE_DOCK")
-
-
-    def initGhostWin(self):
-
-        win = QMainWindow()
-
-        win.setGeometry(
-            0,
-            0,
-            1,
-            1
-        )
-
-        win.setFixedSize(1,1) 
-        win.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
-        win.setWindowOpacity(0)
-        style = "QMainWindow { background : transparent }"
-        win.setStyleSheet(style)
-        win.show()
-        return win  
-
-    def setup(self):
-
-        self.gwin = self.initGhostWin()
-        self.xwin = self.d.create_resource_object("window", self.gwin.winId())
-
-        self.xwin.change_property(self.NET_WM_STRUT, self.CARDINAL, 32, self.strut)
-        self.xwin.change_property(self.NET_WM_STRUT_PARTIAL, self.CARDINAL, 32, self.strut_partial)
-
-        self.xwin.change_property(self.NET_WM_WINDOW_TYPE, Xatom.ATOM, 32, [self.NET_WM_WINDOW_TYPE_DOCK])
-        self.d.flush()
-
-        self.gwin.activateWindow()
-
-    def close(self):
-        self.gwin.close()
-        self.xwin.destroy()
-
-    def show(self):
-        self.gwin.show()
-    
-    def hide(self):
-        self.gwin.hide()
 

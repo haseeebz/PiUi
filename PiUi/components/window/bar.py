@@ -1,12 +1,15 @@
 
 from .window import PiWindow
 from .xstrut import Strut
-from typing import Literal
+
 from PiUi.app.core import Screen
 from PiUi.components.widgets.widget import PiWidget
 from PiUi.components.helpers import evalBarPosition, evalBarSize
 
 from PiUi.app.utils.helper import enforceType
+
+from typing import Literal
+
 
 class PiBar(PiWindow):
 
@@ -27,5 +30,5 @@ class PiBar(PiWindow):
             position = evalBarPosition(side, size, screen), 
             size = evalBarSize(side, size, screen) , 
             strut = strut,
-            rootWidget = widget
+            widget = widget
             )

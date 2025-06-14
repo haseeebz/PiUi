@@ -1,5 +1,5 @@
 
-from typing import Literal
+
 from .widget import PiWidget
 
 from PiUi.components.helpers import clearLayout
@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QFrame
 )
 
-
+from typing import Literal
 
 
 class PiBox(PiWidget):
@@ -34,8 +34,10 @@ class PiBox(PiWidget):
         ):
 
         super().__init__(QFrame, name, height, width, hAlign, vAlign, state)
-        self._qt___: QFrame
+        self._backend: QFrame
         
+        enforceType(widgets, (list, Binding, type(None)), "widgets")
+
         if orientation == "horizontal":
             layout = QHBoxLayout()
         elif orientation == "vertical":
@@ -45,16 +47,15 @@ class PiBox(PiWidget):
             layout = QHBoxLayout()
         
         layout.setContentsMargins(0,0,0,0)
-        self._qt___.setLayout(layout)
-        self._qt___.setContentsMargins(0,0,0,0)
+        self._backend.setLayout(layout)
+        self._backend.setContentsMargins(0,0,0,0)
 
         if spacing:
             self.applyAttribute(
-                self._qt___.layout().setSpacing,
+                self._backend.layout().setSpacing,
                 spacing
             )
         
-        enforceType(widgets, (list, Binding, type(None)), "widgets")
         if widgets:
             self.applyAttribute(
                 self.setWidgets,
@@ -62,12 +63,12 @@ class PiBox(PiWidget):
             )
 
     def setWidgets(self, widgets: list[PiWidget]):
-        layout = self._qt___.layout()
+        layout = self._backend.layout()
         clearLayout(layout)
         if widgets:
             for widget in widgets:
-                self._qt___.layout().addWidget(
-                    widget._qt___, 
+                self._backend.layout().addWidget(
+                    widget._backend, 
                     alignment= (widget.hAlign.value | widget.vAlign.value)
                     )
         

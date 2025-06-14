@@ -34,56 +34,56 @@ class PiEventBox(PiWidget):
         ):
 
         super().__init__(CustomEventWidget, name, height, width, hAlign, vAlign, state)
-        self._qt___: CustomEventWidget
+        self._backend: CustomEventWidget
 
         
         if onRightClick:
             self.applyAttribute(
-                self._qt___.connectRightClick,
+                self._backend.connectRightClick,
                 onRightClick
             )
 
         if onLeftClick:
             self.applyAttribute(
-                self._qt___.connectLeftClick,
+                self._backend.connectLeftClick,
                 onLeftClick
             )
 
         if onMiddleClick:
             self.applyAttribute(
-                self._qt___.connectMiddleClick,
+                self._backend.connectMiddleClick,
                 onMiddleClick
             )
 
         if onMouseRelease:
             self.applyAttribute(
-                self._qt___.connectMouseRelease,
+                self._backend.connectMouseRelease,
                 onMouseRelease
             )
 
         if onDoubleClick:
             self.applyAttribute(
-                self._qt___.connectDoubleClick,
+                self._backend.connectDoubleClick,
                 onDoubleClick
             )
 
         if onMouseEnter:
             self.applyAttribute(
-                self._qt___.connectMouseEnter,
+                self._backend.connectMouseEnter,
                 onMouseEnter
             )
 
         if onMouseLeave:
             self.applyAttribute(
-                self._qt___.connectMouseLeave,
+                self._backend.connectMouseLeave,
                 onMouseLeave
             )
 
 
         layout = QHBoxLayout()
         layout.setContentsMargins(0,0,0,0)
-        self._qt___.setLayout(layout)
-        self._qt___.setContentsMargins(0,0,0,0)
+        self._backend.setLayout(layout)
+        self._backend.setContentsMargins(0,0,0,0)
 
         enforceType(widget, (PiWidget, Binding, type(None)), "widget")
         if widget:
@@ -94,8 +94,8 @@ class PiEventBox(PiWidget):
 
 
     def setWidgets(self, widget: PiWidget):
-        self._qt___.layout().addWidget(
-            widget._qt___, 
+        self._backend.layout().addWidget(
+            widget._backend, 
             alignment= (widget.hAlign.value | widget.vAlign.value)
             )
         

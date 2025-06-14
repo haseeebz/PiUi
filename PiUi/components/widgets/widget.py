@@ -1,11 +1,12 @@
 
 
-from typing import Callable
+
 from PiUi.app.utils.binder import Binding
 from PiUi.app.utils.poller import Poll
 from PiUi.app.utils import Alignment
-from PySide6.QtWidgets import QWidget
 
+from PySide6.QtWidgets import QWidget
+from typing import Callable
 
 class PiWidget():
 
@@ -20,23 +21,23 @@ class PiWidget():
         state: str = None
         ):
 
-        self._qt___: QWidget = qt()
+        self._backend: QWidget = qt()
         
         if name:
             self.applyAttribute(
-                self._qt___.setObjectName,
+                self._backend.setObjectName,
                 name
             )
 
         if height:
             self.applyAttribute(
-                self._qt___.setFixedHeight,
+                self._backend.setFixedHeight,
                 height
             )
             
         if width:
             self.applyAttribute(
-                self._qt___.setFixedWidth,
+                self._backend.setFixedWidth,
                 width
             )
         
@@ -49,13 +50,13 @@ class PiWidget():
                 state
             )
 
-        self._qt___.setContentsMargins(0,0,0,0)
+        self._backend.setContentsMargins(0,0,0,0)
 
 
     def setState(self, value:str):
-        self._qt___.setProperty("state", value)
-        self._qt___.style().unpolish(self._qt___)
-        self._qt___.style().polish(self._qt___)
+        self._backend.setProperty("state", value)
+        self._backend.style().unpolish(self._backend)
+        self._backend.style().polish(self._backend)
 
 
     def applyAttribute(self, setter: Callable, value):

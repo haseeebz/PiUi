@@ -5,6 +5,7 @@ __pycache__/
 main.py
 style.qss
 app.py
+test.py
 tools.py
 widgets.py
 bar.qss

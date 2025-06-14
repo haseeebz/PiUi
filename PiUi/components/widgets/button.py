@@ -26,23 +26,23 @@ class PiButton(PiWidget):
     ):
 
         super().__init__(QPushButton, name, height, width, hAlign, vAlign, state)
-        self._qt___ : QPushButton
+        self._backend : QPushButton
     
         if text:
             self.applyAttribute(
-                self._qt___.setText,
+                self._backend.setText,
                 text
             )
 
         if onClick:
             self.applyAttribute(
-                self._qt___.clicked.connect,
+                self._backend.clicked.connect,
                 onClick
             )
 
         if onRelease:
             self.applyAttribute(
-                self._qt___.released.connect,
+                self._backend.released.connect,
                 onRelease
             )
 
