@@ -6,6 +6,7 @@ from PiUi.components.widgets.widget import PiWidget
 from PiUi.app.utils.helper import enforceType
 
 from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtCore import Qt
 
 from typing import Tuple, Literal
 
@@ -21,11 +22,14 @@ class PiWindow():
         widget: PiWidget = None,
         strut: Strut = None,    
         windowType: Literal["desktop", "dock"] = "dock",
-        ground: Literal["fg", "bg"] = "fg"
+        ground: Literal["fg", "bg"] = "fg",
+        focusable: bool = False
         ):
 
         enforceType(widget, (PiWidget, type(None)), "widget")
         enforceType(strut, (Strut, type(None)), "strut")
+
+        
  
         if windowType not in ("dock", "desktop"):
             raise ValueError(f"Invalid Window Type! (name={name}). Valid Types are: 'dock', 'desktop'")
@@ -34,7 +38,7 @@ class PiWindow():
 
         
         if True:
-            self._backend: XBackEnd = XBackEnd(windowType, ground, strut)
+            self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable)
         else: 
             pass #wayland
 
@@ -72,3 +76,5 @@ class PiWindow():
         else:
             self.hide()
 
+    def ignoreWM(self):
+        self._backend.setWindowFlag(Qt.WindowType.BypassWindowManagerHint)

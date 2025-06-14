@@ -21,7 +21,8 @@ class PiBar(PiWindow):
         size: int,
         widget: PiWidget = None,
         strut: Strut = None,
-        screen: Screen
+        screen: Screen,
+        focusable: bool = False
         ):
         
         enforceType(widget, (PiWidget, type(None)), "rootWidget")
@@ -30,5 +31,8 @@ class PiBar(PiWindow):
             position = evalBarPosition(side, size, screen), 
             size = evalBarSize(side, size, screen) , 
             strut = strut,
-            widget = widget
+            widget = widget,
+            windowType= "dock",
+            ground = "fg",
+            focusable= focusable
             )

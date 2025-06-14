@@ -1,6 +1,7 @@
 
 import struct
 from PySide6.QtWidgets import QFrame
+from PySide6.QtCore import Qt
 from Xlib import display, Xatom, X
 from PySide6.QtCore import QTimer
 from .xstrut import Strut
@@ -12,7 +13,7 @@ class XBackEnd(QFrame):
     display = None
     root = None
 
-    def __init__(self, win_type: str, ground: str, strut: Strut):
+    def __init__(self, win_type: str, ground: str, strut: Strut, focusable: bool):
         super().__init__()
         self.display = display.Display()
         self.root = self.display.screen().root
@@ -29,12 +30,12 @@ class XBackEnd(QFrame):
             self.ATOMS["strut"] = self.display.intern_atom("_NET_WM_STRUT")
             self.ATOMS["strut_partial"] = self.display.intern_atom("_NET_WM_STRUT_PARTIAL")
             self.ATOMS["cardinal"] = self.display.intern_atom("CARDINAL")
+            self.ATOMS["input"] = self.display.intern_atom("_NET_WM_INPUT")
     
-        
         self._setWinType(win_type)
         self._setWinStates(ground)
         self._disableDeco()
-
+        self._setFocus(focusable)
         self.display.sync()
 
 
@@ -108,6 +109,15 @@ class XBackEnd(QFrame):
         
         self.display.flush()
 
+    def _setFocus(self, t: bool):
+
+        if t:
+            self.xwin.change_property(self.ATOMS["input"], self.ATOMS["cardinal"], 32, [1])
+            self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        else:
+            self.xwin.change_property(self.ATOMS["input"], self.ATOMS["cardinal"], 32, [0])
+            self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
     
     def showEvent(self, event):
         super().showEvent(event)
@@ -120,3 +130,5 @@ class XBackEnd(QFrame):
         self.xwin.delete_property(self.ATOMS["strut"])
         self.xwin.delete_property(self.ATOMS["strut_partial"])
         self.display.flush()
+
+    

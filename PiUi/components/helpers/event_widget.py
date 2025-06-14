@@ -1,13 +1,15 @@
 
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel
-from PySide6.QtGui import QPixmap
+
+
+from PySide6.QtWidgets import QFrame
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent
-from typing import Callable, Tuple
-from PiUi.app.core import Screen
+from typing import Callable
 
 
-class CustomEventWidget(QFrame):
+
+
+class EventWidget(QFrame):
 
     def __init__(self):
         super().__init__()
@@ -71,72 +73,4 @@ class CustomEventWidget(QFrame):
 
     def connectMouseLeave(self, func: Callable):
         self.mouseLeave = func
-
-
-class ImageWidget(QFrame):
-
-    def __init__(self):
-        super().__init__()
-        self.layoutBox = QHBoxLayout()
-        self.label = QLabel()
-        self.label.setScaledContents(True)
-        self.layoutBox.addWidget(self.label)
-        self.setLayout(self.layoutBox)
-        self.pixmap: QPixmap
-
-    def setImage(self, path: str):
-        self.pixmap = QPixmap(path)
-        self.label.setPixmap(self.pixmap)
-        
-        
-
-
-def evalBarPosition(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
-    
-    positions = {
-        "top" : (0, 0),
-        "bottom" : (0, screen.y - size),
-        "left" : (0, 0),
-        "right" : (screen.x - size, 0)
-    }
-
-    if position in positions:
-        return positions[position]
-    else:
-        print("Incorrect Position for PiBar, Defaulting to Bottom.")
-        return positions["bottom"]
-
-def evalBarSize(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
-
-    sizes = {
-        "top" : (screen.x , size),
-        "bottom" : (screen.x, size),
-        "left" : (size, screen.y),
-        "right" : (size, screen.y)
-    }
-
-    if position in sizes:
-        return sizes[position]
-    else:
-        print("Incorrect Position for PiBar, Defaulting to Bottom.")
-        return sizes["bottom"]
-
-
-def clearLayout(layout: QHBoxLayout):
-
-    if layout is None:
-        return
-    
-    while layout.count():
-
-        item = layout.itemAt(0)
-
-        widget = item.widget()
-        if widget is not None:
-            widget.setParent(None)
-        else:
-            layout = item.layout()
-            if layout:
-                clearLayout(layout)
-
 

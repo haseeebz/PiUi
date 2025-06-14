@@ -3,3 +3,4 @@ from .button import PiButton
 from .label import PiLabel
 from .eventbox import PiEventBox
 from .image import PiImage
+from .text_input import PiTextInput

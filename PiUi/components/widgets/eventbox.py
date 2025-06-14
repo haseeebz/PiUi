@@ -9,7 +9,7 @@ from PiUi.app.utils import Alignment
 from PiUi.app.utils.helper import enforceType
 from PySide6.QtWidgets import QHBoxLayout
 
-from PiUi.components.helpers import CustomEventWidget
+from PiUi.components.helpers import EventWidget
 
 
 class PiEventBox(PiWidget):
@@ -33,8 +33,8 @@ class PiEventBox(PiWidget):
         onMouseLeave: Callable | Binding | Poll | None = None,
         ):
 
-        super().__init__(CustomEventWidget, name, height, width, hAlign, vAlign, state)
-        self._backend: CustomEventWidget
+        super().__init__(EventWidget, name, height, width, hAlign, vAlign, state)
+        self._backend: EventWidget
 
         
         if onRightClick:
