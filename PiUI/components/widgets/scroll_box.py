@@ -4,14 +4,14 @@
 
 
 from .widget import PiWidget
-from PiUi.app.utils.binder import Binding
-from PiUi.app.utils.poller import Poll
-from PiUi.app.utils import Alignment
+from PiUI.app.utils.binder import Binding
+from PiUI.app.utils.poller import Poll
+from PiUI.app.utils import Alignment
 
 from typing import Callable, Literal
 
-from PiUi.components.helpers import ScrollWidget, clearLayout
-from PiUi.app.utils.helper import enforceType
+from PiUI.components.helpers import ScrollWidget, clearLayout
+from PiUI.app.utils.helper import enforceType
 
 class PiScrollBox(PiWidget):
     def __init__(

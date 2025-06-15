@@ -2,13 +2,13 @@
 
 
 from .widget import PiWidget
-from PiUi.app.utils.binder import Binding
-from PiUi.app.utils.poller import Poll
-from PiUi.app.utils import Alignment
+from PiUI.app.utils.binder import Binding
+from PiUI.app.utils.poller import Poll
+from PiUI.app.utils import Alignment
 
 from typing import Callable
 
-from PiUi.components.helpers import InputWidget
+from PiUI.components.helpers import InputWidget
 
 class PiTextInput(PiWidget):
     def __init__(

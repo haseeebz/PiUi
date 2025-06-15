@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
 	QApplication
 )
 
-from PiUi.app.utils import Binder, Poller, Timer
+from PiUI.app.utils import Binder, Poller, Timer
 from .screen import Screen
 import sys
 from typing import Callable, Tuple
@@ -14,7 +14,7 @@ class AppCore():
 	def __init__(self):
 
 		self._app___ = QApplication(sys.argv)
-		self.stylesheet: str = None
+		self.stylesheet: str | None = None
 
 		self.screen = Screen(self._app___)
 
@@ -32,4 +32,3 @@ class AppCore():
 			self._app___.setStyleSheet(self.stylesheet)
 		except FileNotFoundError:
 			print(f"Stylesheet file not found: {style_path}")
-

@@ -1,9 +1,9 @@
 
 
 
-from PiUi.app.utils.binder import Binding
-from PiUi.app.utils.poller import Poll
-from PiUi.app.utils import Alignment
+from PiUI.app.utils.binder import Binding
+from PiUI.app.utils.poller import Poll
+from PiUI.app.utils import Alignment
 
 from PySide6.QtWidgets import QWidget
 from typing import Callable

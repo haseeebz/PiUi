@@ -2,11 +2,11 @@
 from .window import PiWindow
 from .xstrut import Strut
 
-from PiUi.app.core import Screen
-from PiUi.components.widgets.widget import PiWidget
-from PiUi.components.helpers import evalBarPosition, evalBarSize
+from PiUI.app.core import Screen
+from PiUI.components.widgets.widget import PiWidget
+from PiUI.components.helpers import evalBarPosition, evalBarSize
 
-from PiUi.app.utils.helper import enforceType
+from PiUI.app.utils.helper import enforceType
 
 from typing import Literal
 

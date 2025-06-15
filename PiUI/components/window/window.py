@@ -2,8 +2,8 @@
 from .xstrut import Strut
 from .x11 import XBackEnd
 
-from PiUi.components.widgets.widget import PiWidget
-from PiUi.app.utils.helper import enforceType
+from PiUI.components.widgets.widget import PiWidget
+from PiUI.app.utils.helper import enforceType
 
 from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtCore import Qt

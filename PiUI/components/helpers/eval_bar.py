@@ -1,7 +1,7 @@
 
 
 from typing import Tuple
-from PiUi.app.core import Screen
+from PiUI.app.core import Screen
 
 
 def evalBarPosition(position: str,  size: int, screen: Screen) -> Tuple[int, int]:

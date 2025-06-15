@@ -2,11 +2,11 @@
 
 from .widget import PiWidget
 
-from PiUi.components.helpers import clearLayout
-from PiUi.app.utils.binder import Binding
-from PiUi.app.utils.poller import Poll
-from PiUi.app.utils import Alignment
-from PiUi.app.utils.helper import enforceType
+from PiUI.components.helpers import clearLayout
+from PiUI.app.utils.binder import Binding
+from PiUI.app.utils.poller import Poll
+from PiUI.app.utils import Alignment
+from PiUI.app.utils.helper import enforceType
 
 from PySide6.QtWidgets import (
     QHBoxLayout,
