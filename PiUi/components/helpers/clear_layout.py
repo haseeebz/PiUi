@@ -1,7 +1,7 @@
 
-from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtWidgets import QLayout
 
-def clearLayout(layout: QHBoxLayout):
+def clearLayout(layout: QLayout | None):
 
     if layout is None:
         return
@@ -10,11 +10,11 @@ def clearLayout(layout: QHBoxLayout):
 
         item = layout.itemAt(0)
 
-        widget = item.widget()
+        widget = item.widget() # type: ignore #None Handled
         if widget is not None:
             widget.setParent(None)
         else:
-            layout = item.layout()
+            layout = item.layout() # type: ignore #None Handled
             if layout:
                 clearLayout(layout)
 

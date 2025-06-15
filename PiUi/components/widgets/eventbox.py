@@ -9,7 +9,8 @@ from PiUi.app.utils import Alignment
 from PiUi.app.utils.helper import enforceType
 from PySide6.QtWidgets import QHBoxLayout
 
-from PiUi.components.helpers import EventWidget
+from PiUi.components.helpers import EventWidget, clearLayout
+
 
 
 class PiEventBox(PiWidget):
@@ -88,15 +89,18 @@ class PiEventBox(PiWidget):
         enforceType(widget, (PiWidget, Binding, type(None)), "widget")
         if widget:
                 self.applyAttribute(
-                    self.setWidgets,
+                    self.setWidget,
                     widget
                 )
 
 
-    def setWidgets(self, widget: PiWidget):
-        self._backend.layout().addWidget(
-            widget._backend, 
-            alignment= (widget.hAlign.value | widget.vAlign.value)
-            )
+    def setWidget(self, widget: PiWidget):
+        layout = self._backend.layout()
+        clearLayout(layout)
+        if layout and widget:
+            self._backend.layout().addWidget( # type: ignore # None Handled
+                widget._backend, 
+                alignment= (widget.hAlign.value | widget.vAlign.value) # type: ignore # None Handled
+                )
         
 

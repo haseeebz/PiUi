@@ -13,12 +13,12 @@ class PiWidget():
     def __init__(
         self,
         qt,
-        name: str | None = None,
-        height: int | None = None,
-        width: int | None = None,
+        name: str | Binding | Poll | None = None,
+        height: int | Binding | Poll | None = None,
+        width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = Alignment.H.center,
         vAlign: Alignment.V | None = Alignment.V.center,
-        state: str = None
+        state: str | Binding | Poll | None = None 
         ):
 
         self._backend: QWidget = qt()

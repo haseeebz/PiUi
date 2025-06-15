@@ -52,7 +52,7 @@ class PiBox(PiWidget):
 
         if spacing:
             self.applyAttribute(
-                self._backend.layout().setSpacing,
+                self._backend.layout().setSpacing, # type: ignore # None Handled
                 spacing
             )
         
@@ -65,11 +65,11 @@ class PiBox(PiWidget):
     def setWidgets(self, widgets: list[PiWidget]):
         layout = self._backend.layout()
         clearLayout(layout)
-        if widgets:
+        if widgets and layout:
             for widget in widgets:
-                self._backend.layout().addWidget(
+                self._backend.layout().addWidget( # type: ignore # None Handled
                     widget._backend, 
-                    alignment= (widget.hAlign.value | widget.vAlign.value)
+                    alignment = (widget.hAlign.value | widget.vAlign.value) # type: ignore # None Handled
                     )
         
     
