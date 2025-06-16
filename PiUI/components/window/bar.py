@@ -19,8 +19,8 @@ class PiBar(PiWindow):
         name: str | None = None,
         side: Literal["top", "bottom", "left", "right"],
         size: int,
-        widget: PiWidget = None,
-        strut: Strut = None,
+        widget: PiWidget,
+        strut: Strut | None = None,
         screen: Screen,
         focusable: bool = False
         ):

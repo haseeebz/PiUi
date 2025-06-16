@@ -7,12 +7,20 @@ from PySide6.QtCore import Qt
 
 class Strut():
 	
-    def __init__(self, strut: Tuple[int, int, int, int], screen):
+    def __init__(
+        self,
+        screen,
+        *,
+        top: int = 0,
+        bottom : int = 0,
+        right:  int = 0 ,
+        left:  int = 0 
+        ):
         
-        self.strut_main = strut
+        self.strut_main = [left, right, top, bottom]
 
         self.strut_partial = [
-            *strut,
+            *self.strut_main,
             0,0,
             0,0,
             0,0,

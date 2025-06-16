@@ -5,7 +5,7 @@ from .x11 import XBackEnd
 from PiUI.components.widgets.widget import PiWidget
 from PiUI.app.utils.helper import enforceType
 
-from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
 from PySide6.QtCore import Qt
 
 from typing import Tuple, Literal
@@ -19,8 +19,8 @@ class PiWindow():
         name: str | None = None,
         position: Tuple[int, int],
         size: Tuple[int, int],
-        widget: PiWidget = None,
-        strut: Strut = None,    
+        widget: PiWidget | None = None,
+        strut: Strut | None = None,    
         windowType: Literal["desktop", "dock"] = "dock",
         ground: Literal["fg", "bg"] = "fg",
         focusable: bool = False
@@ -38,7 +38,7 @@ class PiWindow():
 
         
         if True:
-            self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable)
+            self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable) #type:ignore #None Handled
         else: 
             pass #wayland
 
@@ -52,13 +52,16 @@ class PiWindow():
         # Root Widget Setup
 
         layout = QHBoxLayout()
+        layout.addStretch()
         layout.setContentsMargins(0,0,0,0)
         
         if widget:
-            layout.addWidget(widget._backend, alignment= widget.hAlign.value | widget.vAlign.value)
+            layout.addWidget(widget._backend, stretch = 1, alignment= widget.hAlign.value | widget.vAlign.value) #type:ignore #None Handled
 
         self._backend.setLayout(layout)
         self._backend.setContentsMargins(0,0,0,0)
+        self._backend.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
 
 
     def close(self):

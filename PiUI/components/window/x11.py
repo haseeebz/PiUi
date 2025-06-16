@@ -1,6 +1,6 @@
 
 import struct
-from PySide6.QtWidgets import QFrame
+from PySide6.QtWidgets import QFrame, QWidget
 from PySide6.QtCore import Qt
 from Xlib import display, Xatom, X
 from PySide6.QtCore import QTimer
