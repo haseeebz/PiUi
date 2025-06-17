@@ -1,25 +1,25 @@
 import socket
 import os
 import threading
-from typing import Callable
+from typing import Callable, Any
 
 SOCKET_PATH = "/tmp/piui.sock"
 
 from .logger import getLogger
 log = getLogger("core")
+from PiUI.components.window import PiWindow
 
 class Controller():
 
     def __init__(self) -> None:
 
-        self.server: socket.socket = self.setupServer()
-
-        self.bindings: dict[str, Callable[[], str]] = {}
-        self.t = threading.Thread(target = self.run)
+        self.server: socket.socket = self._setupServer()
+        self.windows: dict[str, PiWindow] = {}
+        self.handlers: dict[str, Callable[[Any], str]] = {}
+        
         self.lock = threading.Lock()
-        self.t.start()
-
-    def setupServer(self):
+        
+    def _setupServer(self):
         if os.path.exists(SOCKET_PATH):
             log.debug(f"SOCKET PATH: {SOCKET_PATH} already exists. Overwriting.")
             os.remove(SOCKET_PATH)
@@ -31,6 +31,10 @@ class Controller():
         return self.server
 
     def run(self):
+        self.t = threading.Thread(target = self.loop)
+        self.t.start()
+
+    def loop(self):
 
         with self.lock:
             log.debug("Controller server is now running in a seperate thread.")
@@ -41,7 +45,7 @@ class Controller():
                 
                 data = conn.recv(1024)
                 if data:
-                    output = self.parseCommand(data)
+                    output = self._execCommand(data)
                     conn.sendall(output.encode())
                 conn.close()
 
@@ -51,7 +55,8 @@ class Controller():
         finally:
             self.server.close()       
 
-    def parseCommand(self, data) -> str:
+
+    def _execCommand(self, data) -> str:
         msg: str = data.decode()
 
         with self.lock:
@@ -59,21 +64,50 @@ class Controller():
 
         parts = msg.split()
         
-        event = parts[0]
+        cmd = parts[0]
         arguments = parts[1:]
 
         with self.lock:
-            if event not in self.bindings.keys():
-                return "Unknown Event: Check for typos."
+            if cmd not in self.handlers.keys():
+                return "Unknown command: Check for typos."
             
-            try:
-                output = self.bindings[event](*arguments)
-                log.info(f"Controller on receiving event '{event}', called the binded function '{self.bindings[event]}' with arguments: {arguments} ")
-            except Exception as e:
-                return str(e)
+        try:
+            output = self.handlers[cmd](*arguments)
+            log.info(f"Controller on receiving command '{cmd}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments} ")
+        except Exception as e:
+            return str(e)
+        
+        return output
+
+    def defineCommand(self, cmd: str, func: Callable[[Any], str]):
+        with self.lock:
+            self.handlers[cmd] = func
+
+    def internalCall(self, cmd: str):
+        self._execCommand(cmd)
+    
+    def showWindow(self, name: str) -> str:
+        with self.lock:
+            if name not in self.windows.keys():
+                return f"Could not show window '{name}'. Either it does not exist or wasn't registered by the controller.'"
             
-            return output
-
+            self.windows[name].show()
+            return f"Successfully shown window '{name}'"
         
+    def hideWindow(self, name: str) -> str:
+        with self.lock:
+            if name not in self.windows.keys():
+                return f"Could not hide window '{name}'. Either it does not exist or wasn't registered by the controller.'"
+            
+            self.windows[name].hide()
+            return f"Successfully closed window '{name}'"
 
-        
+    def registerWindows(self, *args: PiWindow):
+        for arg in args:
+            if isinstance(arg, PiWindow):
+                self.windows.update({arg.name(): arg})
+            else:
+                log.warning("An argument was passed to Pi.controller.registerWindows() that was not a PiWindow or any of its subclasses. Ignored.")
+
+        self.defineCommand("show", self.showWindow)
+        self.defineCommand("hide", self.hideWindow)

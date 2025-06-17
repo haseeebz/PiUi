@@ -6,8 +6,8 @@ from .xstrut import Strut
 from PiUI.components.widgets.widget import PiWidget
 from PiUI.components.helpers import evalBarPosition, evalBarSize
 
-from PiUI.utils.helper import enforceType
-from PiUI.utils import Screen
+from PiUI.core.tools.helper import enforceType
+from PiUI.core.tools import Screen
 from typing import Literal
 
 from PiUI.core.logger import getLogger
@@ -26,7 +26,7 @@ class PiBar(PiWindow):
         screen: Screen,
         focusable: bool = False
         ):
-        log = getLogger("window")
+        log = getLogger("component")
         log.info(f"PiBar '{name}' is being initalized. Now will be known as PiWindow {name}.")
         enforceType(widget, (PiWidget, type(None)), "widget")
         super().__init__(

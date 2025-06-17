@@ -3,9 +3,9 @@
 
 from typing import Callable
 from .widget import PiWidget
-from PiUI.utils.binder import Binding
-from PiUI.utils.poller import Poll
-from PiUI.utils import Alignment
+from PiUI.core.tools.binder import Binding
+from PiUI.core.tools.poller import Poll
+from PiUI.core.tools import Alignment
 from PySide6.QtWidgets import QPushButton
 
     

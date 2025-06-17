@@ -3,18 +3,24 @@ import logging
 import os
 from typing import Literal
 
-def setupLogger(logfile: str, level):
+def setupLogger(logfile: str, level: str):
+
+    levels = {
+        "debug" : logging.DEBUG,
+        "info"  : logging.INFO,
+        "warning" : logging.WARNING,
+        "critical" : logging.CRITICAL
+    }
 
     loggerCore = logging.getLogger("PiUI.core")
-    loggerWindow = logging.getLogger("PiUI.window")
-    loggerWidget = logging.getLogger("PiUI.widget")
-    loggerUtils = logging.getLogger("PiUI.utils")
+    loggerComp = logging.getLogger("PiUI.component")
+    loggerUser = logging.getLogger("PiUI.user")
 
-    loggers = [loggerCore, loggerWindow, loggerWidget, loggerUtils]
+    loggers = [loggerCore, loggerComp, loggerUser]
 
     for logger in loggers:
 
-        logger.setLevel(level)
+        logger.setLevel(levels[level])
         logger.propagate = False
         if logger.handlers:
             continue
@@ -27,8 +33,8 @@ def setupLogger(logfile: str, level):
         stream = logging.StreamHandler()
         stream.setFormatter(formatter)
         logger.addHandler(stream)
-
-        if not os.path.exists(logfile):
+        
+        if not os.path.exists(os.path.expanduser(logfile)):
             open(logfile, "w").close()
 
         file_handler = logging.FileHandler(logfile)
@@ -36,8 +42,6 @@ def setupLogger(logfile: str, level):
         logger.addHandler(file_handler)
 
     
-
-
-def getLogger(component: Literal["core", "window", "widget", "utils"]):
+def getLogger(component: Literal["core", "component", "user"]):
     logger = logging.getLogger(f"PiUI.{component}")
     return logger

@@ -1,9 +1,9 @@
 
 from .widget import PiWidget
 from PiUI.components.helpers import ImageWidget
-from PiUI.utils.binder import Binding
-from PiUI.utils.poller import Poll
-from PiUI.utils import Alignment
+from PiUI.core.tools.binder import Binding
+from PiUI.core.tools.poller import Poll
+from PiUI.core.tools import Alignment
 
     
 class PiImage(PiWidget):

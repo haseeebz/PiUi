@@ -5,12 +5,12 @@ from PySide6.QtCore import Qt
 from .xstrut import Strut
 from .x11 import XBackEnd
 from PiUI.components.widgets.widget import PiWidget
-from PiUI.utils.helper import enforceType
+from PiUI.core.tools.helper import enforceType
 
 from typing import Tuple, Literal
 
 from PiUI.core.logger import getLogger
-log = getLogger("window")
+log = getLogger("component")
 
 class PiWindow():
 

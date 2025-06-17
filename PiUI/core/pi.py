@@ -3,49 +3,55 @@
 from PySide6.QtWidgets import (
 	QApplication
 )
+from typing import Literal
+import threading
 
-from .logger import setupLogger, getLogger
+import logging, sys
+
+from .logger import getLogger, setupLogger
 from .controller import Controller
-from PiUI.utils import Poller, Binder, Shell, Timer, Screen
+from PiUI.core.tools import Poller, Binder, Shell, Timer, Screen, Debounce
 
-class AppCore():
+class PiSingleton():
 
-	def __init__(self, *, logfile: str):
-
-		setupLogger(logfile, logging.INFO)
-
+	def __init__(self) -> None:
 		self._app = QApplication(sys.argv)
-		self.controller = Controller()
-		self.binder = Binder()
-		self.poller = Poller()
+		
+		self._pilog: logging.Logger  = None #type: ignore
+		self.log: logging.Logger  = None #type: ignore
 
 		self.screen = Screen(self._app)
-		self.windows: dict[str, PiWindow] = {}
-		
+		self.binder = Binder()
+		self.poller = Poller()
+		self.controller = Controller()
+		self.Timer = Timer
+		self.Shell = Shell
+		self.Debounce = Debounce
 
-	def run(self):
-		sys.exit(self._app.exec())
+		self.lock = threading.Lock()
+	
+	def init(
+		self,
+		*,
+		logfile: str = "~/.cache/PiUI/main.log", 
+		loglevel: Literal["info", "debug", "warning", "critical"] = "info"
+		):
 
-	def setStyleSheet(self, style_path: str):
+		setupLogger(logfile, loglevel)
+
+		self._pilog = getLogger("core")
+		self.log = getLogger("user")
+
+	def setStylesheet(self, style_path: str):
 		try:
 			with open(style_path) as file:
 				self.stylesheet = file.read()
 			self._app.setStyleSheet(self.stylesheet)
 		except FileNotFoundError:
-			self._log.warning(f"StyleSheet Path '{style_path}' could not be resolved!")
+			self._pilog.warning(f"StyleSheet Path '{style_path}' could not be resolved!")
 
-	def registerWindows(self, *args: PiWindow):
-		for arg in args:
-			if isinstance(arg, PiWindow):
-				self.windows.update({arg.name(): arg})
-			else:
-				self._log.warning("An argument was passed to AppCore.registerWindows() that was not a PiWindow or any of its subclasses. Ignored.")
+	def run(self):
+		self.controller.run()
+		self._app.exec()
 
-	def setupController(self):
-		pass
-
-
-class Runtime():
-
-	def __init__(self) -> None:
-		self.binder 
+Pi = PiSingleton()
