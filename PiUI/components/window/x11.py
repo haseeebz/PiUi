@@ -6,7 +6,7 @@ from Xlib import display, Xatom, X
 from PySide6.QtCore import QTimer
 from .xstrut import Strut
 
-from PiUI.app.core.logger import getLogger
+from PiUI.core.logger import getLogger
 log = getLogger("window")
 
 class XBackEnd(QFrame):

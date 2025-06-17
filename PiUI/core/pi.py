@@ -1,16 +1,12 @@
 
+
 from PySide6.QtWidgets import (
 	QApplication
 )
 
-from ..utils.screen import Screen
+from .logger import setupLogger, getLogger
 from .controller import Controller
-from .logger import setupLogger, logging, getLogger
-from PiUI.components.window import PiWindow
-import sys
-from typing import Callable, Tuple
-
-from PiUI.app.utils import 
+from PiUI.utils import Poller, Binder, Shell, Timer, Screen
 
 class AppCore():
 
@@ -18,9 +14,10 @@ class AppCore():
 
 		setupLogger(logfile, logging.INFO)
 
-		self._log = getLogger("core")
 		self._app = QApplication(sys.argv)
-		self._controller = Controller()
+		self.controller = Controller()
+		self.binder = Binder()
+		self.poller = Poller()
 
 		self.screen = Screen(self._app)
 		self.windows: dict[str, PiWindow] = {}

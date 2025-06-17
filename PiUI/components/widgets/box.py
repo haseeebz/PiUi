@@ -3,10 +3,10 @@
 from .widget import PiWidget
 
 from PiUI.components.helpers import clearLayout
-from PiUI.app.utils.binder import Binding
-from PiUI.app.utils.poller import Poll
-from PiUI.app.utils import Alignment
-from PiUI.app.utils.helper import enforceType
+from PiUI.utils.binder import Binding
+from PiUI.utils.poller import Poll
+from PiUI.utils import Alignment
+from PiUI.utils.helper import enforceType
 
 from PySide6.QtWidgets import (
     QHBoxLayout,

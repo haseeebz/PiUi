@@ -1,7 +1,7 @@
 
 from PySide6.QtWidgets import QApplication
 from typing import Tuple
-from PiUI.app.core.logger import getLogger
+from PiUIcore.logger import getLogger
 
 
 

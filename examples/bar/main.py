@@ -1,9 +1,9 @@
 
-from PiUI.app.core import AppCore
+from PiUIcore import AppCore
 from PiUI.components.window import PiBar, Strut, PiWindow
 
 from PiUI.components.widgets import PiBox, PiLabel
-from PiUI.app.utils import Alignment
+from PiUIutils import Alignment
 
 core = AppCore(logfile= "test.log")
 

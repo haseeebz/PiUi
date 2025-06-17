@@ -2,9 +2,9 @@
 
 
 from .widget import PiWidget
-from PiUI.app.utils.binder import Binding
-from PiUI.app.utils.poller import Poll
-from PiUI.app.utils import Alignment
+from PiUI.utils.binder import Binding
+from PiUI.utils.poller import Poll
+from PiUI.utils import Alignment
 
 from typing import Callable
 

@@ -3,7 +3,7 @@
 
 from PiUI.components.widgets import PiBox, PiLabel, PiButton
 
-from PiUI.app.utils import Binder, Poller, Shell
+from PiUIutils import Binder, Poller, Shell
 
 
 def get_workspaces(binder: Binder):

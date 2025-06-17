@@ -10,7 +10,7 @@ from PiUI.utils.helper import enforceType
 from PiUI.utils import Screen
 from typing import Literal
 
-from PiUI.app.core.logger import getLogger
+from PiUI.core.logger import getLogger
 
 
 class PiBar(PiWindow):
