@@ -22,8 +22,8 @@ class PiScrollBox(PiWidget):
         widget: PiWidget | Binding | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
-        hAlign: Alignment.H | None = Alignment.H.center,
-        vAlign: Alignment.V | None = Alignment.V.center,
+        hAlign: Alignment.H | None = None,
+        vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None,
         onScroll: Callable | Binding | Poll | None = None,
     ):

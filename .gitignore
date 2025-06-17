@@ -5,6 +5,5 @@ __pycache__/
 **/__pycache__/
 *.pyc
 test.py
-tools.py
 todo
-
+test.log

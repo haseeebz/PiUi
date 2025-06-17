@@ -6,7 +6,7 @@ from PiUI.app.utils.binder import Binding
 from PiUI.app.utils.poller import Poll
 from PiUI.app.utils import Alignment
 
-from PySide6.QtWidgets import QLabel, QHBoxLayout
+from PySide6.QtWidgets import QLabel, QHBoxLayout, QSizePolicy
 
 
 class PiLabel(PiWidget):
@@ -17,8 +17,8 @@ class PiLabel(PiWidget):
         text: str | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
-        hAlign: Alignment.H | None = Alignment.H.center,
-        vAlign: Alignment.V | None = Alignment.V.center,
+        hAlign: Alignment.H | None = None,
+        vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None    
     ):
         
@@ -31,6 +31,7 @@ class PiLabel(PiWidget):
                 text
             )
         
-        self._backend.setLayout(QHBoxLayout())
+
+        
 
 

@@ -1,10 +1,8 @@
 
 
 from typing import Tuple
-from PiUI.app.core import Screen
 
-
-def evalBarPosition(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
+def evalBarPosition(position: str,  size: int, screen) -> Tuple[int, int]:
     
     positions = {
         "top" : (0, 0),
@@ -19,7 +17,8 @@ def evalBarPosition(position: str,  size: int, screen: Screen) -> Tuple[int, int
         print("Incorrect Position for PiBar, Defaulting to Bottom.")
         return positions["bottom"]
 
-def evalBarSize(position: str,  size: int, screen: Screen) -> Tuple[int, int]:
+
+def evalBarSize(position: str,  size: int, screen) -> Tuple[int, int]:
 
     sizes = {
         "top" : (screen.x , size),

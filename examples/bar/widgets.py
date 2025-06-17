@@ -18,11 +18,11 @@ clock = PiLabel(
 )
 
 
+
 workspaces = PiBox(
     name = "workspaces",
     orientation = "horizontal",
-    width = 160,
-    hAlign = Alignment.H.left,
+    spacing = 22,
     widgets = tools.get_workspaces(binder),
 )
 

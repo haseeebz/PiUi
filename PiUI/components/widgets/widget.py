@@ -5,7 +5,7 @@ from PiUI.app.utils.binder import Binding
 from PiUI.app.utils.poller import Poll
 from PiUI.app.utils import Alignment
 
-from PySide6.QtWidgets import QWidget, QSizePolicy
+from PySide6.QtWidgets import QWidget
 from typing import Callable
 
 class PiWidget():
@@ -16,8 +16,8 @@ class PiWidget():
         name: str | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
-        hAlign: Alignment.H | None = Alignment.H.center,
-        vAlign: Alignment.V | None = Alignment.V.center,
+        hAlign: Alignment.H | None = None,
+        vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None 
         ):
 
@@ -41,8 +41,13 @@ class PiWidget():
                 width
             )
         
-        self.hAlign = hAlign
-        self.vAlign = vAlign
+
+        self.alignment = Alignment.base
+        if hAlign:
+            self.alignment |= hAlign.value
+        if vAlign:
+            self.alignment |= vAlign.value
+
 
         if state:
             self.applyAttribute(
@@ -51,8 +56,7 @@ class PiWidget():
             )
 
         self._backend.setContentsMargins(0,0,0,0)
-        self._backend.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-
+    
 
     def setState(self, value:str):
         self._backend.setProperty("state", value)

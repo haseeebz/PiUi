@@ -13,7 +13,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QFrame,
     QSizePolicy,
-    QWidget
+    QWidget,
+    QSpacerItem
 )
 
 from PySide6.QtCore import Qt
@@ -32,8 +33,8 @@ class PiBox(PiWidget):
         spacing: int | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
-        hAlign: Alignment.H | None = Alignment.H.center,
-        vAlign: Alignment.V | None = Alignment.V.center,
+        hAlign: Alignment.H | None = None,
+        vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None
         ):
 
@@ -49,9 +50,8 @@ class PiBox(PiWidget):
         else:
             print("Incorrect or Left out orientation for PiBox!\nDefaulting to horizontal.")
             layout = QHBoxLayout()
-        
+
         layout.setContentsMargins(0,0,0,0)
-        
         self._backend.setLayout(layout)
         self._backend.setContentsMargins(0,0,0,0)
         if spacing:
@@ -69,12 +69,21 @@ class PiBox(PiWidget):
     def setWidgets(self, widgets: list[PiWidget]):
         layout = self._backend.layout()
         clearLayout(layout)
-        if widgets and layout:
-            for widget in widgets:
-                self._backend.layout().addWidget( # type: ignore # None Handled
+
+        if not (widgets and layout):
+            return
+        
+        for widget in widgets:
+            if widget.alignment:
+                layout.addWidget( 
                     widget._backend,
                     stretch = 1,   # type: ignore # *
-                    alignment = (widget.hAlign.value | widget.vAlign.value) # type: ignore # None Handled
+                    alignment = widget.alignment # type: ignore # None Handled
                     )
-        
+            else:
+                layout.addWidget( 
+                    widget._backend,
+                    stretch = 1,   # type: ignore 
+                    )
+
     # * QLayout doesnt have stretch but its subclasses: QVboxLayout and QHboxLayout do have this parameter

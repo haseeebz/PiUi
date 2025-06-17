@@ -1,22 +1,23 @@
 
+from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtCore import Qt
+
 from .xstrut import Strut
 from .x11 import XBackEnd
-
 from PiUI.components.widgets.widget import PiWidget
-from PiUI.app.utils.helper import enforceType
-
-from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
-from PySide6.QtCore import Qt
+from PiUI.utils.helper import enforceType
 
 from typing import Tuple, Literal
 
+from PiUI.core.logger import getLogger
+log = getLogger("window")
 
 class PiWindow():
 
     def __init__(
         self,
         *,
-        name: str | None = None,
+        name: str,
         position: Tuple[int, int],
         size: Tuple[int, int],
         widget: PiWidget | None = None,
@@ -26,49 +27,65 @@ class PiWindow():
         focusable: bool = False
         ):
 
+        # TYPE CHECKS
+
         enforceType(widget, (PiWidget, type(None)), "widget")
         enforceType(strut, (Strut, type(None)), "strut")
 
-        
- 
         if windowType not in ("dock", "desktop"):
             raise ValueError(f"Invalid Window Type! (name={name}). Valid Types are: 'dock', 'desktop'")
         if ground not in ("fg", "bg"):
             raise ValueError(f"Invalid Window Ground! (name={name}). Valid Types are: 'fg', 'bg'")
 
         
-        if True:
-            self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable) #type:ignore #None Handled
-        else: 
-            pass #wayland
+        #BACKEND INIT
 
+        self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable) #type:ignore 
+        #None Handled internally
+        log.info(f"PiWindow with name '{name}' has X id: {self._backend.win_id}")
+    
 
+        #WINDOW
+
+        if name:
+            self._name: str = name
+            self._backend.setObjectName(name)
+
+        self._setGeometry(position, size)
+        self._setWidget(widget)
+        
+    def _setGeometry(self, position, size):
         self._backend.setGeometry(*position, *size)
         self._backend.setFixedSize(*size)
 
-        if name:
-            self._backend.setObjectName(name)
+        log.info(f"PiWindow '{self._name}' setup with dimensions: ({*position, *size})")
 
-        # Root Widget Setup
-
+    def _setWidget(self, widget):
         layout = QHBoxLayout()
-        layout.addStretch()
-        layout.setContentsMargins(0,0,0,0)
         
         if widget:
-            layout.addWidget(widget._backend, stretch = 1, alignment= widget.hAlign.value | widget.vAlign.value) #type:ignore #None Handled
 
+            if widget.alignment:
+                layout.addWidget(widget._backend, alignment= widget.alignment) #type:ignore #None Handled
+            else:
+                layout.addWidget(widget._backend)
+
+            log.debug(f"PiWindow '{self._name}' has a root widget.")
+
+        else:
+            log.debug(f"PiWindow '{self._name}' does not have a root widget.")
+
+        layout.setContentsMargins(0,0,0,0)
         self._backend.setLayout(layout)
         self._backend.setContentsMargins(0,0,0,0)
-        self._backend.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-
 
     def close(self):
         self._backend.close()
+        log.info(f"PiWindow '{self._name}' hidden.")
 
     def show(self):
         self._backend.show()
+        log.info(f"PiWindow '{self._name}' shown.")
 
     def hide(self):
         self._backend.hide()
@@ -81,3 +98,10 @@ class PiWindow():
 
     def ignoreWM(self):
         self._backend.setWindowFlag(Qt.WindowType.BypassWindowManagerHint)
+        log.debug(f"PiWindow '{self._name}' now bypasses the window manager.")
+
+    def name(self):
+        return self._backend.objectName()
+    
+
+

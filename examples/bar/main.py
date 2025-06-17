@@ -4,27 +4,50 @@ from PiUI.components.window import PiBar, Strut, PiWindow
 
 from PiUI.components.widgets import PiBox, PiLabel
 from PiUI.app.utils import Alignment
-core = AppCore()
+
+core = AppCore(logfile= "test.log")
 
 import widgets
 
 
-bar = PiWindow(
+bar = PiBar(
     name = "bar",
-    position = (0, core.screen.y - 40),
-    size = (core.screen.x, 40),
+    side = "bottom",
+    size = 40,
+    screen = core.screen,
     strut = Strut(core.screen, bottom = 42),
 
     widget = PiBox(
         orientation = "horizontal",
+        width = core.screen.x,
         widgets = [
-            widgets.workspaces,
-            widgets.clock
+
+            PiBox(
+                hAlign = Alignment.H.left,
+                orientation = "horizontal",
+                widgets = [
+                    widgets.workspaces
+                ],
+                    
+            ),
+
+            PiBox(
+                orientation = "horizontal",
+                hAlign = Alignment.H.center,
+                widgets = [
+                    widgets.clock
+                ]
+
+            ),
+
+            PiBox(
+                hAlign = Alignment.H.right,
+                orientation = "horizontal",
+            )
         ]
     )
 )
 
 bar.show()
-
 core.setStyleSheet("style.qss")
 core.run()
