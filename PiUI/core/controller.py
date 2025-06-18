@@ -20,7 +20,9 @@ class Controller():
         
         self.lock = threading.Lock()
         
+
     def _setupServer(self):
+
         if os.path.exists(SOCKET_PATH):
             log.debug(f"SOCKET PATH: {SOCKET_PATH} already exists. Overwriting.")
             os.remove(SOCKET_PATH)
@@ -32,9 +34,12 @@ class Controller():
         log.info("Controller server has been initiated.")
         return self.server
 
+
     def run(self):
+        self.defineCommand("help", self.helpCommand)
         self.t = threading.Thread(target = self.loop)
         self.t.start()
+
 
     def loop(self):
 
@@ -63,6 +68,7 @@ class Controller():
 
 
     def _execCommand(self, data) -> str | None:
+
         msg: str = data.decode()
 
         with self.lock:
@@ -85,14 +91,18 @@ class Controller():
         
         return output
 
+
     def defineCommand(self, cmd: str, func: Callable[..., str]):
         with self.lock:
             self.handlers[cmd] = func
 
+
     def internalCall(self, cmd: str):
         self._execCommand(cmd)
     
+
     def registerWindows(self, *args: PiWindow):
+
         for arg in args:
             if isinstance(arg, PiWindow):
                 self.windows.update({arg.name(): arg})
@@ -102,8 +112,9 @@ class Controller():
         self.defineCommand("show", self.showWindow)
         self.defineCommand("hide", self.hideWindow)
 
-    
+
     def showWindow(self, name: str) -> str:
+
         with self.lock:
             if name not in self.windows.keys():
                 return f"Could not show window '{name}'. Either it does not exist or wasn't registered by the controller.'"
@@ -111,7 +122,9 @@ class Controller():
             self.windows[name].show()
             return f"Successfully shown window '{name}'"
         
+
     def hideWindow(self, name: str) -> str:
+
         with self.lock:
             if name not in self.windows.keys():
                 return f"Could not hide window '{name}'. Either it does not exist or wasn't registered by the controller.'"
@@ -119,5 +132,15 @@ class Controller():
             self.windows[name].hide()
             return f"Successfully closed window '{name}'"
 
+
+    def helpCommand(self) -> str:
+        msg = help_msg + "\n".join(self.handlers.keys())
+        return msg
     
         
+help_msg = """
+<PiUI CLI interface>
+
+Defined Commands:
+
+"""

@@ -6,7 +6,8 @@ setup(
     packages = find_packages(),
     requires = [
         "PySide6",
-        "Xlib"
+        "Xlib",
+        "colorlog"
     ],
     author = "haseeebz",
     description = "Qt-Based UI Toolkit for making bars, widgets, lockScreens and menus for Linux"

@@ -2,6 +2,7 @@
 import logging
 import os
 from typing import Literal
+from colorlog import ColoredFormatter
 
 def setupLogger(logfile: str, level: str):
 
@@ -21,30 +22,66 @@ def setupLogger(logfile: str, level: str):
 
     loggers = [loggerCore, loggerComp, loggerUser]
 
-    for logger in loggers:
+    logger = logging.getLogger("PiUI")
 
-        logger.setLevel(levels[level])
-        logger.propagate = False
-        if logger.handlers:
-            continue
 
-        formatter = logging.Formatter(
-            "[%(asctime)s] [%(levelname)s] (%(name)s) %(message)s",
-            datefmt = "%H:%M:%S"
-        )  
+    logger.setLevel(levels[level])
 
-        stream = logging.StreamHandler()
-        stream.setFormatter(formatter)
-        logger.addHandler(stream)
-        
-        full_file = os.path.expanduser(logfile)
-        if not os.path.exists(full_file):
-            with open(full_file, "w") as file:
-                file.writable()
+    if logger.handlers:
+        return
 
-        file_handler = logging.FileHandler(full_file)
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
+    color_formatter  = ColoredFormatter(
+
+        "[%(asctime)s] %(log_color)s[%(levelname)s] %(name_log_color)s(%(name)s) %(message_log_color)s%(message)s",
+
+        datefmt = "%H:%M:%S",
+
+        log_colors={
+            'DEBUG'   : 'cyan',
+            'INFO'    : 'green',
+            'WARNING' : 'yellow',
+            'ERROR'   : 'red',
+            'CRITICAL': 'red,bg_white',
+        },
+
+        secondary_log_colors={
+            'message': {
+            'DEBUG'   : 'white',
+            'INFO'    : 'white',
+            'WARNING' : 'white',
+            'ERROR'   : 'white',
+            'CRITICAL': 'white'
+            },
+
+            'name': {
+            'DEBUG'   : 'purple',
+            'INFO'    : 'purple',
+            'WARNING' : 'purple',
+            'ERROR'   : 'purple',
+            'CRITICAL': 'purple'
+            }
+        }
+    )
+
+    formatter = logging.Formatter(
+        "[%(asctime)s] [%(levelname)s] (%(name)s) %(message)s",
+        datefmt = "%H:%M:%S",
+    )
+
+    stream = logging.StreamHandler()
+    stream.setFormatter(color_formatter)
+    logger.addHandler(stream)
+    
+
+    full_file = os.path.expanduser(logfile)
+
+    if not os.path.exists(full_file):
+        with open(full_file, "w") as file:
+            file.writable()
+
+    file_handler = logging.FileHandler(full_file)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
 
     
 def getLogger(component: Literal["core", "component", "user"]):
