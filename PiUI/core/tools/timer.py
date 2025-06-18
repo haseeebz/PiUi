@@ -12,7 +12,7 @@ class Timer():
 		self.qt = QTimer(interval= int(interval*1000), singleShot = singleshot)
 		self.check = checkCondition
 		self.func = func
-		log.debug(f"Made timer which executes func{func} with interval {interval}s. Singleshot={singleshot}.  Check function is {checkCondition}")
+		log.debug(f"Made timer which executes func {func} with interval {interval}s. Singleshot={singleshot}.  Check function is {checkCondition}")
 		self.qt.timeout.connect(func)
 	
 	def execute(self):

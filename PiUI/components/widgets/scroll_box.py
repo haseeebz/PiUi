@@ -19,7 +19,7 @@ class PiScrollBox(PiWidget):
         *,
         name: str | Binding | Poll | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
-        widget: PiWidget | Binding | None = None,
+        widget: PiWidget | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = None,
