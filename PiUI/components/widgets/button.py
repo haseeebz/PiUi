@@ -16,7 +16,7 @@ class PiButton(PiWidget):
         *,
         name: str | Binding | Poll | None = None,
         text: str | Binding | None = None,
-        onClick: Callable | Binding | None = None,
+        onClick: Callable | None = None,
         onRelease: Callable | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
@@ -35,16 +35,9 @@ class PiButton(PiWidget):
             )
 
         if onClick:
-            self.applyAttribute(
-                self._backend.clicked.connect,
-                onClick
-            )
+            self._backend.pressed.connect(onClick)
 
         if onRelease:
-            self.applyAttribute(
-                self._backend.released.connect,
-                onRelease
-            )
-
+            self._backend.released.connect(onRelease)
 
 

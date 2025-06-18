@@ -51,7 +51,17 @@ class PiSingleton():
 			self._pilog.warning(f"StyleSheet Path '{style_path}' could not be resolved!")
 
 	def run(self):
+		self.controller.defineCommand("quit", self.quitApp)
 		self.controller.run()
 		self._app.exec()
+
+	def quitApp(self):
+		self._pilog.info("quit command was sent to controller. Shutting down app.")
+		with self.lock:
+			self._app.exit(0)
+		sys.exit(0)
+		
+
+
 
 Pi = PiSingleton()

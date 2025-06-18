@@ -2,7 +2,7 @@
 
 from PiUI.components.widgets import PiBox, PiLabel
 
-from PiUIutils import Binder, Poller, Alignment, Timer
+from PiUI import Binder, Poller, Alignment, Timer
 
 from datetime import datetime
 

@@ -25,7 +25,7 @@ class PiScrollBox(PiWidget):
         hAlign: Alignment.H | None = None,
         vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None,
-        onScroll: Callable | Binding | Poll | None = None,
+        onScroll: Callable | None = None,
     ):
         super().__init__(ScrollWidget, name, height, width, hAlign, vAlign, state)
         self._backend: ScrollWidget

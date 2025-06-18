@@ -20,7 +20,6 @@ class EventWidget(QFrame):
         self.mouseReleased: Callable = None
         self.mouseEnter: Callable = None
         self.mouseLeave: Callable = None
-        self.show()
 
     def mousePressEvent(self, event: QMouseEvent):
 
@@ -51,7 +50,6 @@ class EventWidget(QFrame):
     def leaveEvent(self, event):
         if self.mouseLeave:
             self.mouseLeave()
-
 
     def connectRightClick(self, func: Callable):
         self.rightClicked = func

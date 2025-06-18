@@ -5,6 +5,9 @@ from typing import Literal
 
 def setupLogger(logfile: str, level: str):
 
+    if not os.path.exists(os.path.expanduser("~/.cache/PiUI")):
+        os.mkdir(os.path.expanduser("~/.cache/PiUI"))
+
     levels = {
         "debug" : logging.DEBUG,
         "info"  : logging.INFO,
@@ -34,10 +37,12 @@ def setupLogger(logfile: str, level: str):
         stream.setFormatter(formatter)
         logger.addHandler(stream)
         
-        if not os.path.exists(os.path.expanduser(logfile)):
-            open(logfile, "w").close()
+        full_file = os.path.expanduser(logfile)
+        if not os.path.exists(full_file):
+            with open(full_file, "w") as file:
+                file.writable()
 
-        file_handler = logging.FileHandler(logfile)
+        file_handler = logging.FileHandler(full_file)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

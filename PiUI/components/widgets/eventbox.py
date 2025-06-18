@@ -25,60 +25,39 @@ class PiEventBox(PiWidget):
         hAlign: Alignment.H | None = None,
         vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None,
-        onRightClick: Callable | Binding | Poll | None = None,
-        onLeftClick: Callable | Binding | Poll | None = None,
-        onMiddleClick: Callable | Binding | Poll | None = None,
-        onDoubleClick: Callable | Binding | Poll | None = None,
-        onMouseRelease: Callable | Binding | Poll | None = None,
-        onMouseEnter: Callable | Binding | Poll | None = None,
-        onMouseLeave: Callable | Binding | Poll | None = None,
+        onRightClick: Callable | None = None,
+        onLeftClick: Callable | None = None,
+        onMiddleClick: Callable | None = None,
+        onDoubleClick: Callable | None = None,
+        onMouseRelease: Callable | None = None,
+        onMouseEnter: Callable | None = None,
+        onMouseLeave: Callable | None = None,
         ):
 
         super().__init__(EventWidget, name, height, width, hAlign, vAlign, state)
         self._backend: EventWidget
 
-        
+
         if onRightClick:
-            self.applyAttribute(
-                self._backend.connectRightClick,
-                onRightClick
-            )
+            self._backend.connectRightClick(onRightClick)
 
         if onLeftClick:
-            self.applyAttribute(
-                self._backend.connectLeftClick,
-                onLeftClick
-            )
+            self._backend.connectLeftClick(onLeftClick)
 
         if onMiddleClick:
-            self.applyAttribute(
-                self._backend.connectMiddleClick,
-                onMiddleClick
-            )
+            self._backend.connectMiddleClick(onMiddleClick)
 
         if onMouseRelease:
-            self.applyAttribute(
-                self._backend.connectMouseRelease,
-                onMouseRelease
-            )
+            self._backend.connectMouseRelease(onMouseRelease)
 
         if onDoubleClick:
-            self.applyAttribute(
-                self._backend.connectDoubleClick,
-                onDoubleClick
-            )
+            self._backend.connectDoubleClick(onDoubleClick)
 
         if onMouseEnter:
-            self.applyAttribute(
-                self._backend.connectMouseEnter,
-                onMouseEnter
-            )
+            self._backend.connectMouseEnter(onMouseEnter)
 
         if onMouseLeave:
-            self.applyAttribute(
-                self._backend.connectMouseLeave,
-                onMouseLeave
-            )
+            self._backend.connectMouseLeave(onMouseLeave)
 
 
         layout = QHBoxLayout()

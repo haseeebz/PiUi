@@ -9,7 +9,7 @@ class ScrollWidget(QScrollArea):
     def __init__(self):
         super().__init__()
         self.scroll_bar = QScrollBar()
-        self.scroll_bar.setObjectName("#ScrollBar")
+        self.scroll_bar.setObjectName("#scrollbar")
         self.on_scroll_func: Callable | None = None
 
         self.styleScrollBar()
