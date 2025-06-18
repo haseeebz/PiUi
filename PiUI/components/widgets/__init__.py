@@ -6,3 +6,4 @@ from .image import PiImage
 from .text_input import PiTextInput
 from .scroll_box import PiScrollBox
 from .progress import PiProgress
+from .spacer import PiSpacer

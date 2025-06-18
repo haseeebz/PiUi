@@ -1,8 +1,9 @@
 
 
-from PySide6.QtWidgets import (
-	QApplication
-)
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
+from PySide6.QtGui import qRgba, QSurfaceFormat
+
 from typing import Literal
 import threading
 
@@ -11,6 +12,7 @@ import logging, sys
 from .logger import getLogger, setupLogger
 from .controller import Controller
 from PiUI.core.tools import Poller, Binder, Shell, Timer, Screen, Debounce
+
 
 class PiSingleton():
 
@@ -41,7 +43,7 @@ class PiSingleton():
 
 		self._pilog = getLogger("core")
 		self.log = getLogger("user")
-
+		
 	def setStylesheet(self, style_path: str):
 		try:
 			with open(style_path) as file:
@@ -61,7 +63,6 @@ class PiSingleton():
 			self._app.exit(0)
 		sys.exit(0)
 		
-
 
 
 Pi = PiSingleton()

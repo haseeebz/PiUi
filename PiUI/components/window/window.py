@@ -1,5 +1,5 @@
 
-from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtWidgets import QHBoxLayout, QWidget
 from PySide6.QtCore import Qt
 
 from .xstrut import Strut
@@ -40,9 +40,11 @@ class PiWindow():
         
         #BACKEND INIT
 
+        
+
         self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable) #type:ignore 
         #None Handled internally
-        log.info(f"PiWindow with name '{name}' has X id: {self._backend.win_id}")
+        #log.info(f"PiWindow with name '{name}' has X id: {self._backend.win_id}")
     
 
         #WINDOW
@@ -53,6 +55,8 @@ class PiWindow():
 
         self._setGeometry(position, size)
         self._setWidget(widget)
+
+        
         
     def _setGeometry(self, position, size):
         self._backend.setGeometry(*position, *size)
@@ -98,7 +102,7 @@ class PiWindow():
 
     def ignoreWM(self):
         self._backend.setWindowFlag(Qt.WindowType.BypassWindowManagerHint)
-        log.debug(f"PiWindow '{self._name}' now bypasses the window manager.")
+        log.info(f"PiWindow '{self._name}' now bypasses the window manager.")
 
     def name(self):
         return self._backend.objectName()

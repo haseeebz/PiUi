@@ -8,6 +8,10 @@ from PiUI.core.tools import Alignment
 from PySide6.QtWidgets import QWidget
 from typing import Callable
 
+
+from PiUI.core.logger import getLogger
+log = getLogger("component")
+
 class PiWidget():
 
     def __init__(
@@ -65,7 +69,10 @@ class PiWidget():
 
 
     def applyAttribute(self, setter: Callable, value):
-        if isinstance(value, (Binding, Poll)):
+        if isinstance(value, Binding):
+            value.bind(setter)
+            log.debug(f"Binding '{value.key}' was binded to setter: {setter}")
+        elif isinstance(value, Poll):
             value.bind(setter)
         else:
             setter(value)
