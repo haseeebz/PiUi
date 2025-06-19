@@ -10,16 +10,17 @@ from PiUI.core.logger import getLogger
 log = getLogger("component")
 
 
-class XBackEnd(QWidget):
+class XBackEnd(QFrame):
 
 	ATOMS = {}
 	display = None
 	root = None
 
-	def __init__(self, win_type: str, ground: str, strut: Strut, focusable: bool):
+	def __init__(self, win_type: str, ground: str, strut: Strut, focusable: bool, transparent: bool):
 		super().__init__()
 
-		self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+		if transparent:
+			self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 		#this needs to be done before the x11 tampering otherwise...it doesnt work for some reason.
 		
 		self.display = display.Display()

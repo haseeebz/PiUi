@@ -47,10 +47,10 @@ class Controller():
             log.debug("Controller server is now running in a seperate thread.")
 
         try:
+            
             while True:
                 time.sleep(0.1)
                 conn, _ = self.server.accept()
-                
                 data = conn.recv(1024)
 
                 if data:
@@ -85,10 +85,16 @@ class Controller():
             
         try:
             output = self.handlers[cmd](*arguments)
-            log.debug(f"Controller on receiving command '{cmd}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output: {output}")
+
+            if isinstance(output, str): output.replace("\n", " ") 
+
         except Exception as e:
-            return str(e)
+            output =  str(e)
         
+
+        with self.lock:
+            log.debug(f"Controller on receiving command '{cmd}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output (newlines removed): {output}")
+
         return output
 
 

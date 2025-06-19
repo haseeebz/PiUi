@@ -40,8 +40,8 @@ def setupLogger(logfile: str, level: str):
             'DEBUG'   : 'cyan',
             'INFO'    : 'green',
             'WARNING' : 'yellow',
-            'ERROR'   : 'red',
-            'CRITICAL': 'red,bg_white',
+            'ERROR'   : 'orange',
+            'CRITICAL': 'red',
         },
 
         secondary_log_colors={

@@ -1,0 +1,40 @@
+
+#! ./.venv/bin/python3
+
+def communicate(cmd, client) -> str | None:
+    client.sendall(cmd.encode())
+    res = client.recv(1024)
+    if res:
+        return res.decode()
+    return None
+    
+
+def main():
+    import socket, sys
+
+    
+    SOCKET_PATH = "/tmp/piui.sock"
+    
+    try:
+        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        client.connect(SOCKET_PATH)
+    except ConnectionRefusedError:
+        client.close()
+        print("Connection Error: Make sure PiUI is running. Also keep in mind that only one PiUI app can run at a time")
+        sys.exit(1)
+
+
+    if len(sys.argv) <= 1:
+        cmd = "help"
+        output = communicate(cmd, client)
+        print(output)
+        sys.exit(0)
+    
+    args = sys.argv[1:]
+    cmd = " ".join(args)
+    output = communicate(cmd, client)
+    if output:
+        print(output)
+    
+if __name__ == "__main__":
+    main()

@@ -24,7 +24,8 @@ class PiWindow():
         strut: Strut | None = None,    
         windowType: Literal["desktop", "dock"] = "dock",
         ground: Literal["fg", "bg"] = "fg",
-        focusable: bool = False
+        focusable: bool = False,
+        transparent: bool = False
         ):
 
         # TYPE CHECKS
@@ -40,11 +41,9 @@ class PiWindow():
         
         #BACKEND INIT
 
-        
-
-        self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable) #type:ignore 
+        self._backend: XBackEnd = XBackEnd(windowType, ground, strut, focusable, transparent) #type:ignore 
         #None Handled internally
-        #log.info(f"PiWindow with name '{name}' has X id: {self._backend.win_id}")
+        log.info(f"PiWindow with name '{name}' has X id: {self._backend.win_id}")
     
 
         #WINDOW
