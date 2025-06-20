@@ -24,7 +24,8 @@ class PiBar(PiWindow):
         widget: PiWidget,
         strut: Strut | None = None,
         screen: Screen,
-        focusable: bool = False
+        focusable: bool = False,
+        tranparent: bool = False
         ):
         log = getLogger("component")
         log.info(f"PiBar '{name}' is being initalized. Now will be known as PiWindow {name}.")
@@ -37,5 +38,6 @@ class PiBar(PiWindow):
             widget = widget,
             windowType= "dock",
             ground = "fg",
-            focusable= focusable
+            focusable= focusable,
+			transparent = tranparent
             )

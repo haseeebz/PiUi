@@ -77,9 +77,16 @@ class PiEventBox(PiWidget):
         layout = self._backend.layout()
         clearLayout(layout)
         if layout and widget:
-            self._backend.layout().addWidget( # type: ignore # None Handled
-                widget._backend, 
-                alignment= (widget.hAlign.value | widget.vAlign.value) # type: ignore # None Handled
-                )
+            if widget.alignment:
+                layout.addWidget( 
+                    widget._backend,
+                    stretch = 1,   # type: ignore # *
+                    alignment = widget.alignment # type: ignore # None Handled
+                    )
+            else:
+                layout.addWidget( 
+                    widget._backend,
+                    stretch = 1,   # type: ignore 
+                    )
         
 

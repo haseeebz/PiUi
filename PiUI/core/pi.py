@@ -4,14 +4,14 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
 from PySide6.QtGui import qRgba, QSurfaceFormat
 
-from typing import Literal
+from typing import Any, Literal
 import threading
 
 import logging, sys
 
 from .logger import getLogger, setupLogger
 from .controller import Controller
-from PiUI.core.tools import Poller, Binder, Shell, Timer, Screen, Debounce
+from PiUI.core.tools import Poller, Binder, Shell, Timer, Screen, Debounce, Alignment
 
 
 class PiSingleton():
@@ -25,10 +25,12 @@ class PiSingleton():
 		self.screen = Screen(self._app)
 		self.binder = Binder()
 		self.poller = Poller()
-		self.controller = Controller()
+		self.controller: Controller = None #type: ignore
+		self.variables: dict[str, Any] = {}
 		self.Timer = Timer
 		self.Shell = Shell
 		self.Debounce = Debounce
+		self.Alignment = Alignment
 
 		self.lock = threading.Lock()
 	
@@ -43,6 +45,8 @@ class PiSingleton():
 
 		self._pilog = getLogger("core")
 		self.log = getLogger("user")
+
+		self.controller = Controller()
 		
 	def setStylesheet(self, style_path: str):
 		try:
@@ -59,9 +63,7 @@ class PiSingleton():
 
 	def quitApp(self):
 		self._pilog.info("quit command was sent to controller. Shutting down app.")
-		with self.lock:
-			self._app.exit(0)
-		sys.exit(0)
+		self._app.exit(0)
 		
 
 

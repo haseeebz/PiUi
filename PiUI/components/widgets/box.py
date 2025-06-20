@@ -29,7 +29,7 @@ class PiBox(PiWidget):
         *,
         name: str | Binding | Poll | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
-        widgets: list[PiWidget] | None = None,
+        widgets: list[PiWidget] | Binding | None = None,
         spacing: int | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,

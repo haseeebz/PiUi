@@ -3,7 +3,6 @@ from enum import Enum
 
 
 class Alignment:
-    base = Qt.AlignmentFlag.AlignJustify
     class H(Enum):
         left = Qt.AlignmentFlag.AlignLeft
         right = Qt.AlignmentFlag.AlignRight
