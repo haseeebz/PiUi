@@ -19,7 +19,7 @@ class PiEventBox(PiWidget):
         self,
         *,
         name: str | Binding | Poll | None = None,
-        widget: PiWidget | None = None,
+        widget: PiWidget | Binding | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = None,

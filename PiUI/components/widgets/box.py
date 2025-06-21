@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtCore import Qt
 
-from typing import Literal
+from typing import Literal, Any
 
 
 class PiBox(PiWidget):
@@ -29,7 +29,7 @@ class PiBox(PiWidget):
         *,
         name: str | Binding | Poll | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
-        widgets: list[PiWidget] | Binding | None = None,
+        widgets: list[Any] | Binding | None = None,
         spacing: int | Binding | Poll | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,
@@ -42,7 +42,7 @@ class PiBox(PiWidget):
         self._backend: QWidget
         
         enforceType(widgets, (list, Binding, type(None)), "widgets")
-
+    
         if orientation == "horizontal":
             layout = QHBoxLayout()
         elif orientation == "vertical":
@@ -74,6 +74,7 @@ class PiBox(PiWidget):
             return
         
         for widget in widgets:
+            enforceType(widget, (PiWidget, Binding), "widget")
             if widget.alignment:
                 layout.addWidget( 
                     widget._backend,

@@ -16,15 +16,7 @@ def setupLogger(logfile: str, level: str):
         "critical" : logging.CRITICAL
     }
 
-    loggerCore = logging.getLogger("PiUI.core")
-    loggerConn = logging.getLogger("PiUI.controller")
-    loggerComp = logging.getLogger("PiUI.component")
-    loggerUser = logging.getLogger("PiUI.user")
-
-    loggers = [loggerCore, loggerComp, loggerUser, loggerConn]
-
     logger = logging.getLogger("PiUI")
-
 
     logger.setLevel(levels[level])
 
@@ -85,6 +77,6 @@ def setupLogger(logfile: str, level: str):
     logger.addHandler(file_handler)
 
     
-def getLogger(component: Literal["core", "component", "user", "controller"]):
+def getLogger(component: str) -> logging.Logger:
     logger = logging.getLogger(f"PiUI.{component}")
     return logger

@@ -1,70 +1,109 @@
 
 
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
-from PySide6.QtGui import qRgba, QSurfaceFormat
 
-from typing import Any, Literal
-import threading
+from PiUI.components.window import PiWindow
 
-import logging, sys
-
-from .logger import getLogger, setupLogger
 from .controller import Controller
-from PiUI.core.tools import Poller, Binder, Shell, Timer, Screen, Debounce, Alignment
+from .server import PiServer
+from .logger import getLogger, setupLogger, logging
 
+from .tools import (
+	Alignment,
+	Binder,
+	Poller,
+	Screen,
+	Shell,
+	Timer,
+	Debounce,
+	System
+)
 
-class PiSingleton():
+from typing import Literal
+import os
+
+class Singleton():
 
 	def __init__(self) -> None:
-		self._app = QApplication(sys.argv)
 		
-		self._pilog: logging.Logger  = None #type: ignore
-		self.log: logging.Logger  = None #type: ignore
+		self._app = QApplication()
 
-		self.screen = Screen(self._app)
+		self._intern_log: logging.Logger = None #type:ignore
+		self.log: logging.Logger = None #type:ignore
+
+		self.controller = Controller()
+		self.server: PiServer = None #type:ignore
+
 		self.binder = Binder()
 		self.poller = Poller()
-		self.controller: Controller = None #type: ignore
-		self.variables: dict[str, Any] = {}
-		self.Timer = Timer
-		self.Shell = Shell
-		self.Debounce = Debounce
-		self.Alignment = Alignment
+		self.screen = Screen(self._app)
+		self.system = System()
 
-		self.lock = threading.Lock()
-	
+		self.Shell = Shell
+		self.Timer = Timer
+		self.Debounce = Debounce
+
+		self._stylesheets: list[str] = []
+		
 	def init(
 		self,
 		*,
-		logfile: str = "~/.cache/PiUI/main.log", 
-		loglevel: Literal["info", "debug", "warning", "critical"] = "info"
+		logfile: str = "~/.cache/PiUI/main.log",
+		loglevel: Literal["info", "debug", "warning", "critical"] = "info",
+		socket_path: str = "/tmp/piui.sock",
+		stylesheets: list[str] = []
 		):
-
+		
 		setupLogger(logfile, loglevel)
 
-		self._pilog = getLogger("core")
+		self._intern_log = getLogger("core")
 		self.log = getLogger("user")
 
-		self.controller = Controller()
-		
-	def setStylesheet(self, style_path: str):
-		try:
-			with open(style_path) as file:
-				self.stylesheet = file.read()
-			self._app.setStyleSheet(self.stylesheet)
-		except FileNotFoundError:
-			self._pilog.warning(f"StyleSheet Path '{style_path}' could not be resolved!")
+		self.server = PiServer(socket_path)
 
-	def run(self):
-		self.controller.defineCommand("quit", self.quitApp)
-		self.controller.run()
-		self._app.exec()
+		if len(stylesheets) > 0:
+			self.applyStylesheet(*stylesheets)
+
+		# important bindings
+
+		self.server.defineCommand(
+			"show", 
+			self.controller.showWindow,
+			"Shows the window. ARGS: module/window name"
+		)
+
+		self.server.defineCommand(
+			"hide", 
+			self.controller.hideWindow,
+			"Hides the window. ARGS: module/window name"
+		)
+
+		self.server.defineCommand(
+			"quit",
+			self.quitApp,
+			"Ends the PiUI server. ARGS: None"
+		)
+
+		self.server.defineCommand(
+			"reload",
+			self.controller._reload,
+			"Reload a module dynamically. ARGS: module name"
+		)
+		
+
+	def applyStylesheet(self, *stylesheets: str):
+		style = ""
+		for stylesheet in stylesheets:
+			try:
+				with open(stylesheet) as file: 
+					style += file.read()
+			except FileNotFoundError:
+				self._intern_log.warning(f"StyleSheet Path '{stylesheet}' could not be resolved!")
+
+		self._stylesheets = stylesheets #type:ignore / will be caught above
+		self._app.setStyleSheet(style)
 
 	def quitApp(self):
-		self._pilog.info("quit command was sent to controller. Shutting down app.")
+		self._intern_log.info("Quit command was sent to the server. Shutting down app.")
+		os.remove(self.server.SOCKET_PATH)
 		self._app.exit(0)
-		
-
-
-Pi = PiSingleton()
