@@ -19,7 +19,7 @@ from .tools import (
 	System
 )
 
-from typing import Literal
+from typing import Literal, Any
 import os
 
 class Singleton():
@@ -42,6 +42,9 @@ class Singleton():
 		self.Shell = Shell
 		self.Timer = Timer
 		self.Debounce = Debounce
+		self.Alignment = Alignment
+		
+		self.variables: dict[str, Any] = {}
 
 		self._stylesheets: list[str] = []
 		
@@ -85,11 +88,14 @@ class Singleton():
 		)
 
 		self.server.defineCommand(
-			"reload",
-			self.controller._reload,
-			"Reload a module dynamically. ARGS: module name"
+			"reload_style",
+			lambda: self.applyStylesheet(*self._stylesheets),
+			"Reload the Stylesheet/s. ARGS: None"
 		)
 		
+	def run(self):
+		self.server.run()
+		self._app.exec()
 
 	def applyStylesheet(self, *stylesheets: str):
 		style = ""
@@ -107,3 +113,6 @@ class Singleton():
 		self._intern_log.info("Quit command was sent to the server. Shutting down app.")
 		os.remove(self.server.SOCKET_PATH)
 		self._app.exit(0)
+
+
+Pi = Singleton()

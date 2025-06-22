@@ -103,11 +103,11 @@ class PiServer():
 
 		except Exception as e:
 			with self.lock:
-				log.error(str(e))
+				log.critical((f"Server on receiving command '{cmd[0]}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function failed: {str(e)}"))
 				return
 		
 		with self.lock:
-			log.debug(f"Controller on receiving command '{cmd}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output (newlines removed): {output}")
+			log.debug(f"Controller on receiving command '{cmd[0]}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output (newlines removed): {output}")
 
 
 	def defineCommand(self, cmd: str, func: Callable, info: str):
@@ -115,18 +115,16 @@ class PiServer():
 
 
 	def helpCommand(self) -> str:
-
-		help_msg = """
-		<PiUI CLI interface>
-
-		[COMMAND] [ARGS...]
-
-		Defined Commands:
-
-		"""
-		commands = [f"{func} : {info}" for func, info in self.handlers.keys()]
+		commands = [f"{item[0]:<20} : {item[1][1]}" for item in self.handlers.items()]
 		msg = help_msg + "\n".join(commands) + "\n"
 		return msg
 	
-	
-		
+			
+help_msg = """
+<PiUI CLI interface>
+
+[COMMAND] [ARGS...]
+
+Defined Commands:
+
+"""

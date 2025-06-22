@@ -2,29 +2,28 @@
 import struct
 from PySide6.QtWidgets import QFrame, QWidget
 from PySide6.QtCore import Qt
-from Xlib import display, Xatom, X
+from Xlib import display, Xatom, X, Xutil
 from PySide6.QtCore import QTimer
 from .xstrut import Strut
-
 from PiUI.core.logger import getLogger
-log = getLogger("component")
+
+log = getLogger("xbackend")
 
 
 class XBackEnd(QFrame):
 
 	ATOMS = {}
-	display = None
-	root = None
+	display = display.Display()
+	root = display.screen().root
 
-	def __init__(self, win_type: str, ground: str, strut: Strut, focusable: bool, transparent: bool):
+	def __init__(self, name: str, win_type: str, ground: str, strut: Strut, focusable: bool, transparent: bool):
 		super().__init__()
 
 		if transparent:
 			self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+		
 		#this needs to be done before the x11 tampering otherwise...it doesnt work for some reason.
 		
-		self.display = display.Display()
-		self.root = self.display.screen().root
 
 		self.win_id = self.winId()
 		self.xwin = self.display.create_resource_object("window", self.win_id)
@@ -40,6 +39,7 @@ class XBackEnd(QFrame):
 			self.ATOMS["strut_partial"] = self.display.intern_atom("_NET_WM_STRUT_PARTIAL")
 			self.ATOMS["cardinal"] = self.display.intern_atom("CARDINAL")
 			self.ATOMS["input"] = self.display.intern_atom("_NET_WM_INPUT")
+			self.ATOMS["class"] = self.display.intern_atom("_NET_WM_CLASS")
 	
 
 
@@ -47,14 +47,17 @@ class XBackEnd(QFrame):
 		self._setWinStates(ground)
 		self._disableDeco()
 		self._setFocus(focusable)
-
-		
+		self._setNames(name, win_type)
+		self._should_steal_input = False
 		self.display.sync()
 
 
 	def initAtom(self, name: str):
 		return self.display.intern_atom(name) #type: ignore #Will be initiatalized
 	
+	def _setNames(self, name: str, win_type: str):
+		self.xwin.set_wm_class(win_type, "PiUI")
+		self.xwin.set_wm_name(name)
 
 	def _setWinType(self, win_type: str):
 		
@@ -136,22 +139,50 @@ class XBackEnd(QFrame):
 			self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 			log.debug(f"Applied focus for X Win ({self.win_id})")
 
+			self.xwin.change_attributes(event_mask = X.KeyPressMask | X.KeyReleaseMask | X.PointerMotionMask)
+
 		else:
 			self.xwin.change_property(self.ATOMS["input"], self.ATOMS["cardinal"], 32, [0])
 			self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 			log.debug(f"Applied focus for X Win ({self.win_id})")
 
 	
+	def _stealInput(self):
+		keyctrl = self.xwin.grab_keyboard(
+			True,
+			X.GrabModeAsync,
+			X.GrabModeAsync,
+			X.CurrentTime
+		)
+		 
+		if keyctrl != X.GrabSuccess:
+			log.critical(f"Could not grab keyboard for xwin {self.win_id}.")
+
+	def _unstealInput(self):
+		self.display.ungrab_keyboard(X.CurrentTime)
+
+	def _afterShow(self):
+		self._setStrut()
+		if self._should_steal_input:
+			self._stealInput()
+
+	def _afterHide(self):
+		self.xwin.delete_property(self.ATOMS["strut"])
+		self.xwin.delete_property(self.ATOMS["strut_partial"])
+		self.display.flush() #type: ignore #will be intialized
+
+		if self._should_steal_input:
+			self._unstealInput()
+
 	def showEvent(self, event):
 		super().showEvent(event)
-		self.timer = QTimer(interval=2, singleShot=True)
-		self.timer.timeout.connect(self._setStrut)
+		self.timer = QTimer(interval=100, singleShot=True)
+		self.timer.timeout.connect(self._afterShow)
 		self.timer.start()
 
 	def hideEvent(self, event):
 		super().hideEvent(event)
-		self.xwin.delete_property(self.ATOMS["strut"])
-		self.xwin.delete_property(self.ATOMS["strut_partial"])
-		self.display.flush() #type: ignore #will be intialized
+		self._afterHide()
+		
 
 	

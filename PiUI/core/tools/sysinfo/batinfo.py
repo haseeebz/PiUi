@@ -105,8 +105,3 @@ class BatteryInfo():
 		return (now/full)*100
 
 
-bat = BatteryInfo()
-bat.checkBatteries()
-print(bat.capacity(0), bat.status(0))
-print(bat.capacity(1), bat.status(1))
-print(bat.totalCapacity())

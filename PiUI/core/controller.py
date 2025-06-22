@@ -1,7 +1,5 @@
 
 from PiUI.components.window import PiWindow
-import importlib
-from types import ModuleType
 
 from .logger import getLogger
 log = getLogger("controller")
@@ -10,45 +8,18 @@ class Controller():
 
 	def __init__(self) -> None:
 		self.windows: dict[str, PiWindow] = {}
-		self.modules: dict[str, ModuleType]
 
-	def load(self, module: str):
-		mod = importlib.import_module(module)
-		try:
-			win = mod.main()
-		except ModuleNotFoundError:
-			pass
-		except AttributeError:
-			pass
+	def addWindow(self, win: PiWindow):
+		if isinstance(win, PiWindow):
+			self.windows[win.name()] = win
+		else:
+			log.warning("An argument was passed to Pi.controller.addWindow that was not a PiWindow (or its subclass) instance. Ignored")
 
-		if not isinstance(win, PiWindow):
-			raise ValueError(f"main() function defined by module {module} did not return a PiWindow object or any of its subclass!")
-
-		self.modules[module] = mod
-		self.windows[module] = win
-	
-	def _reload(self, module: str):
-		self.windows[module].close()
-		mod = importlib.reload(self.modules[module])
-
-		try:
-			win = mod.main()
-		except ModuleNotFoundError:
-			pass
-		except AttributeError:
-			pass
-
-		if not isinstance(win, PiWindow):
-			raise ValueError(f"main() function defined by module {module} did not return a PiWindow object or any of its subclass!")
-
-		self.modules[module] = mod
-		self.windows[module] = win
-
-	def getWindow(self, name: str) -> PiWindow | None:
+	def getWindow(self, name: str) -> PiWindow:
 		if name in self.windows.keys():
 			return self.windows[name]
 		else:
-			return None
+			raise KeyError(f"{name} PiWindow not registered by controller. May not be added.")
 		
 	def showWindow(self, name: str):
 
