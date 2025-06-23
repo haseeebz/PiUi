@@ -3,25 +3,25 @@
 This object allows you to bind the property of a widget to a string. You can then update the propert using the binder.
 NOTE: Keep in mind that the binder should only update the property with a valid value type.
 
-# Methods
+## Methods
 
-## Bind
+### Bind
 Binds the property to a string.
-# Arguments
+#### Arguments
 key -> string to which the property is binded.
 
-## update
+### update
 Update a given property
-# Arguments
+##### Arguments
 key -> string to which the property is binded.
 value -> value to which the property is updated. Must be a valid value the property can accept.
 
-## combine
+### combine
 Combines a binder with another binder.
-# Arguements
+#### Arguements
 other -> Binder which you want to combine
 
-# Examples
+## Example
 
 ```python
 label = PiLabel(
