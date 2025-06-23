@@ -1,4 +1,6 @@
 
+# PiUI
+
 ## Introduction
 
 PiUI is a Qt-based toolkit for creating system UI like bars, menus, lockscreens and much more for Linux. It's built on top of PySide6 and follows a declarative approach, allowing you to create UI by passing in properties. It's main goal is to make widget/ui creation as easy as possible for the user.
