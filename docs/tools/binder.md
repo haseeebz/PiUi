@@ -7,19 +7,19 @@ NOTE: Keep in mind that the binder should only update the property with a valid 
 
 ### Bind
 Binds the property to a string.
-#### Arguments
-key -> string to which the property is binded.
+###### Arguments
+key: string to which the property is binded.
 
 ### update
 Update a given property
-##### Arguments
-key -> string to which the property is binded.
-value -> value to which the property is updated. Must be a valid value the property can accept.
+###### Arguments
+key: string to which the property is binded.
+value: value to which the property is updated. Must be a valid value the property can accept.
 
 ### combine
 Combines a binder with another binder.
-#### Arguements
-other -> Binder which you want to combine
+###### Arguements
+other:  Binder which you want to combine
 
 ## Example
 

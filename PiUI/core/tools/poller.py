@@ -4,7 +4,7 @@
 import subprocess
 from typing import Callable
 from .timer import Timer
-
+from .shell import Shell
 
 class Poller():
 
@@ -39,11 +39,15 @@ class Poll():
 		self.setter(self.func())
 
 	def shell_run(self):
-		output = subprocess.run(self.shell.split(" "), capture_output= True).stdout
+		output = Shell(self.shell)
+		
+		if not output[1]:
+			return
+		
 		if self.typeCast:
-			self.setter(self.typeCast(output))
+			self.setter(self.typeCast(output[0]))
 		else:
-			self.setter(output)
+			self.setter(output[0])
 	
 	def bind(self, setter: Callable):
 		self.setter = setter
