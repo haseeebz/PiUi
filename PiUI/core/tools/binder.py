@@ -13,7 +13,7 @@ class Binder:
         self._lock = Lock()
         self.bindings: dict[str, Binding] = {}
 
-    def Bind(self, key: str):
+    def bind(self, key: str):
         with self._lock:
             binding = Binding(key)
             self.bindings[key] = binding

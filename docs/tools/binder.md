@@ -5,27 +5,26 @@ NOTE: Keep in mind that the binder should only update the property with a valid 
 
 ## Methods
 
-### Bind
+### bind
 Binds the property to a string.
-###### Arguments
-key: string to which the property is binded.
++ key : string to which the property is binded.
 
 ### update
 Update a given property
-###### Arguments
-key: string to which the property is binded.
-value: value to which the property is updated. Must be a valid value the property can accept.
++ key : string to which the property is binded.
++ value : value to which the property is updated. Must be a valid value the property can accept.
 
 ### combine
 Combines a binder with another binder.
-###### Arguements
-other:  Binder which you want to combine
++ other :  Binder which you want to combine
 
 ## Example
 
+The of text of label can now be updated from anywhere using binder.
+
 ```python
 label = PiLabel(
-	text = Pi.binder.Bind("text")
+	text = Pi.binder.bind("text")
 )
 
 Pi.binder.update("text", "Hello World!")

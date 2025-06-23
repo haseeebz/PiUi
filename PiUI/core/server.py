@@ -92,7 +92,6 @@ class PiServer():
 		
 		cmd = parts[0]
 		arguments = parts[1:]
-
 		
 		if cmd not in self.handlers.keys():
 			return "Unknown command: Check for typos."
