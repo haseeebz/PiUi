@@ -11,5 +11,5 @@ setup(
     ],
     author = "haseeebz",
     description = "Qt-Based UI Toolkit for making bars, widgets, lockScreens and menus for Linux",
-    scripts=['./PiUI/core/pi-cli']
+    scripts=['./PiUI/core/pi-ctl']
 )

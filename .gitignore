@@ -1,13 +1,9 @@
 .venv/
 .vscode/
-
 *.egg-info/
-
 __pycache__/
 **/__pycache__/
 *.pyc
-
 test.py
 todo
-
 MySetup/
