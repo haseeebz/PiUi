@@ -1,17 +1,25 @@
 
 from PiUI.components.window import PiWindow
-from PiUI.components.widgets import PiTextInput
+from PiUI.components.widgets.widget import PiWidget
 
-import Xlib
+from PiUI.core.tools.screen import Screen
+
 class PiLockScreen(PiWindow):
 
-	def __init__(self) -> None:
+	def __init__(
+		self,
+		*,
+		name: str,
+		screen: Screen,
+		transparent: bool = False,
+		focusable: bool = True,
+		widget: PiWidget 
+		) -> None:
 		super().__init__(
-			name = "lock",
+			name = name,
 			position = (0,0),
-			size = (1920, 1080),
-			transparent = True,
-			focusable = True,
-			widget = PiTextInput(placeHolderText = "Works?")
+			size = screen.pair,
+			transparent = transparent,
+			focusable = focusable,
+			widget = widget
 		)
-		self.show()

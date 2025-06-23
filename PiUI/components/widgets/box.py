@@ -11,10 +11,7 @@ from PiUI.core.tools.helper import enforceType
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
-    QFrame,
-    QSizePolicy,
     QWidget,
-    QSpacerItem
 )
 
 from PySide6.QtCore import Qt
@@ -84,7 +81,7 @@ class PiBox(PiWidget):
             else:
                 layout.addWidget( 
                     widget._backend,
-                    stretch = 1,   # type: ignore 
+                    stretch = 1   # type: ignore 
                     )
 
     # * QLayout doesnt have stretch but its subclasses: QVboxLayout and QHboxLayout do have this parameter
