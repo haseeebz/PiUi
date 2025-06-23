@@ -19,12 +19,11 @@ pip install .
 
 ```
 
-## Basic Example
+## How To
 
 Here is a basic example of a bar in PiUI:
 
 ```python
-
 from PiUI.core import Pi 
 # shared object, holds all utils you need
 
@@ -62,6 +61,32 @@ Pi.run() #essential
 ```
 
 The above example creates a simple bar at the top of the screen that displays the current time.
+
+There is also a cli "pi-ctl" that you can use to manipulate windows externally. If you are installing this toolkit in a venv that the cli script is in ./.venv/bin/, you can either export it to your local applications as:
+```bash
+mv ./.venv/bin/pi-ctl ~/.local/bin/pi-ctl
+```
+
+or just link it as:
+```bash
+ln ./.venv/bin/pi-ctl ~/.local/bin/pi-ctl
+```
+
+Then you can control windows with their "name" property:
+```bash
+pi-ctl help
+pi-ctl hide bar
+```
+
+Show it with:
+```bash
+pi-ctl show bar
+```
+
+If you want to end the app properly, you must use:
+```bash
+pi-ctl quit
+```
 
 ## More
 
