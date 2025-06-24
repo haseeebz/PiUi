@@ -8,3 +8,4 @@ from .scroll_box import PiScrollBox
 from .progress import PiProgress
 from .spacer import PiSpacer
 from .overlay import PiOverlay
+from .password import PiPasswordBox

@@ -1,8 +1,11 @@
 
 from PiUI.components.window import PiWindow
 from PiUI.components.widgets.widget import PiWidget
+from PiUI.components.widgets import PiPasswordBox
 
 from PiUI.core.tools.screen import Screen
+
+from PySide6.QtCore import QCoreApplication
 
 class PiLockScreen(PiWindow):
 
@@ -13,7 +16,8 @@ class PiLockScreen(PiWindow):
 		screen: Screen,
 		transparent: bool = False,
 		focusable: bool = True,
-		widget: PiWidget 
+		widget: PiWidget,
+		passwordBox: PiPasswordBox
 		) -> None:
 		super().__init__(
 			name = name,
@@ -23,3 +27,7 @@ class PiLockScreen(PiWindow):
 			focusable = focusable,
 			widget = widget
 		)
+		self._backend._should_steal_input = True
+		self._backend.inputhandler.connectPasswordBox(passwordBox._receiveKey)
+		self.ignoreWM()
+		

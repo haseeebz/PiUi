@@ -1,14 +1,15 @@
 
-import struct
-from PySide6.QtWidgets import QFrame, QWidget
-from PySide6.QtCore import Qt
-from Xlib import display, Xatom, X, Xutil
+import struct, threading
+from typing import Callable
+from PySide6.QtWidgets import QFrame
+from PySide6.QtCore import Qt, Signal, QObject
+from Xlib import display, Xatom, X, XK
+from Xlib.protocol import event
 from PySide6.QtCore import QTimer
 from .xstrut import Strut
 from PiUI.core.logger import getLogger
 
 log = getLogger("xbackend")
-
 
 class XBackEnd(QFrame):
 
@@ -28,6 +29,8 @@ class XBackEnd(QFrame):
 		self.win_id = self.winId()
 		self.xwin = self.display.create_resource_object("window", self.win_id)
 		self.strut = strut
+		self.xwin.change_attributes(event_mask = X.KeyPressMask | X.KeyReleaseMask | X.PointerMotionMask | X.StructureNotifyMask | X.ClientMessage)
+		self.inputhandler = InputHandler(self.display)
 		log.debug(f"X Window initialized with id: {self.win_id}")
 
 		if not self.ATOMS:
@@ -45,10 +48,15 @@ class XBackEnd(QFrame):
 
 		self._setWinType(win_type)
 		self._setWinStates(ground)
+
 		self._disableDeco()
+
 		self._setFocus(focusable)
+
 		self._setNames(name, win_type)
+
 		self._should_steal_input = False
+
 		self.display.sync()
 
 
@@ -139,14 +147,11 @@ class XBackEnd(QFrame):
 			self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 			log.debug(f"Applied focus for X Win ({self.win_id})")
 
-			self.xwin.change_attributes(event_mask = X.KeyPressMask | X.KeyReleaseMask | X.PointerMotionMask)
-
 		else:
 			self.xwin.change_property(self.ATOMS["input"], self.ATOMS["cardinal"], 32, [0])
 			self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 			log.debug(f"Applied focus for X Win ({self.win_id})")
 
-	
 	def _stealInput(self):
 		keyctrl = self.xwin.grab_keyboard(
 			True,
@@ -164,15 +169,24 @@ class XBackEnd(QFrame):
 	def _afterShow(self):
 		self._setStrut()
 		if self._should_steal_input:
+			self.inputhandler.start()
 			self._stealInput()
 
 	def _afterHide(self):
 		self.xwin.delete_property(self.ATOMS["strut"])
 		self.xwin.delete_property(self.ATOMS["strut_partial"])
-		self.display.flush() #type: ignore #will be intialized
 
 		if self._should_steal_input:
 			self._unstealInput()
+			ev = event.ClientMessage(
+				window = self.root,
+				client_type = 0,
+				data=(32, [0, 0, 0, 0, 0])
+			)
+			self.display.send_event(self.win_id, ev, X.StructureNotifyMask)
+			self.display.flush()
+			
+		self.display.flush() 
 
 	def showEvent(self, event):
 		super().showEvent(event)
@@ -184,5 +198,42 @@ class XBackEnd(QFrame):
 		super().hideEvent(event)
 		self._afterHide()
 		
-
 	
+	def closeEvent(self, event):
+		self._afterHide()
+		super().closeEvent(event)
+		
+
+
+class InputHandler(QObject):
+
+	keyReceived = Signal(str)
+
+	def __init__(self, display: display.Display):
+		super().__init__()
+		self.display = display
+		self.func = None
+	
+	def connectPasswordBox(self, func):
+		self.func = func
+		self.keyReceived.connect(self.func)
+
+	def start(self):
+		self.t = threading.Thread(target = self.loop)
+		self.t.start()
+		
+	def stop(self):
+		self.t.join()
+
+	def loop(self):
+		while True:
+			event = self.display.next_event()
+			if event.type == X.ClientMessage:
+				break
+			if event.type == X.KeyPress:
+				shift = event.state & X.ShiftMask
+				keycode = event.detail
+				keysym = self.display.keycode_to_keysym(keycode, 1 if shift else 0)
+				char = XK.keysym_to_string(keysym)
+				self.keyReceived.emit(char)
+
