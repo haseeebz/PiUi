@@ -1,11 +1,19 @@
 
 # PiUI
 
-## Introduction
 
 PiUI is a Qt-based toolkit for creating system UI like bars, menus, lockscreens and much more for Linux. It's built on top of PySide6 and follows a declarative approach, allowing you to create UI by passing in properties. It's main goal is to make widget/ui creation as easy as possible for the user.
 
 Still under development. Currently only X11 is supported but Wayland support is on the (very) distant horizon.
+
+## Features
+
+Current supported features that are worth mentioning include:
++ Declarative UI
++ GUI caveats such as transparency, image rounding, layouts etc.
++ Custom commands the user can declare and call from the terminal.
++ Proper Lockscreen (PAM support is on the way)
++ Out of the box utilities such as binding, polling and system info.
 
 ## Installation
 
@@ -64,12 +72,7 @@ Pi.run() #essential
 
 The above example creates a simple bar at the top of the screen that displays the current time.
 
-There is also a cli "pi-ctl" that you can use to manipulate windows externally. If you are installing this toolkit in a venv that the cli script is in ./.venv/bin/, you can either export it to your local applications as:
-```bash
-mv ./.venv/bin/pi-ctl ~/.local/bin/pi-ctl
-```
-
-or just link it as:
+There is also a cli "pi-ctl" that you can use to manipulate windows externally. If you are installing this toolkit in a venv than the cli script is in .venv/bin/. If you want to use this globally, you can just link it as:
 ```bash
 ln ./.venv/bin/pi-ctl ~/.local/bin/pi-ctl
 ```
