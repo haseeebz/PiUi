@@ -11,7 +11,7 @@ This is the only method you should care about. It allows you to define a command
 + func : The function which gets called on receiving the cmd. All strings after the cmd will be sent as string arguments to this function. You have to type cast them manually
 + info : Useful for personal documentation.
 
-### execCommand
+### internalCall
 Used to give a command to the server internally. Not really recommended for usage.
 + msg : The command you want to execute.
 

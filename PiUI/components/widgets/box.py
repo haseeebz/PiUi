@@ -24,7 +24,7 @@ class PiBox(PiWidget):
     def __init__(
         self,
         *,
-        name: str | Binding | Poll | None = None,
+        name: str | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
         widgets: list[Any] | Binding | None = None,
         spacing: int | Binding | Poll | None = None,

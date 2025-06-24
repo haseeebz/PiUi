@@ -2,17 +2,17 @@
 
 from PySide6.QtCore import Signal, QObject
 import socket
-import os, time, threading
+import os, time, threading, json, shlex
 from typing import Callable
 
 from .logger import getLogger
-log = getLogger("socket") 
+log = getLogger("server") 
 
 
 
 
 class SignalBridge(QObject): #this class's entire purpose is to not pollute PiServer with useless shit
-	cmdReceived = Signal(str)
+	cmdReceived = Signal(dict)
 	def __init__(self, func: Callable):
 		super().__init__()
 		self.cmdReceived.connect(func)
@@ -20,8 +20,6 @@ class SignalBridge(QObject): #this class's entire purpose is to not pollute PiSe
 
 class PiServer():
 	
-	cmdReceived = Signal(str)
-
 	def __init__(self, socket_path: str) -> None:
 		super().__init__()
 		self.SOCKET_PATH = socket_path
@@ -67,16 +65,17 @@ class PiServer():
 					conn.close()
 
 				msg = data.decode()
+				fmsg = json.loads(msg)
 
-				if msg == "help":
+				if fmsg["cmd"] == "help":
 					output = self.helpCommand()
 					conn.sendall(output.encode())
-				elif msg == "quit":
+				elif fmsg["cmd"] == "quit":
 					conn.close()
-					self.signal.cmdReceived.emit(msg)
+					self.signal.cmdReceived.emit(fmsg)
 					break
 				else:
-					self.signal.cmdReceived.emit(msg)
+					self.signal.cmdReceived.emit(fmsg)
 
 				conn.close()
 
@@ -86,12 +85,11 @@ class PiServer():
 		finally:
 			self.socket.close()       
 
-	def execCommand(self, msg: str) -> str | None:
+	def execCommand(self, fmsg: dict) -> str | None:
 
-		parts = msg.split()
-		
-		cmd = parts[0]
-		arguments = parts[1:]
+		cmd = fmsg["cmd"]
+
+		arguments = fmsg["args"] if "args" in fmsg.keys() else []
 		
 		if cmd not in self.handlers.keys():
 			return "Unknown command: Check for typos."
@@ -103,15 +101,49 @@ class PiServer():
 		except Exception as e:
 			with self.lock:
 				log.critical((f"Server on receiving command '{cmd[0]}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function failed: {str(e)}"))
-				return
+				return str(e)
 		
 		with self.lock:
 			log.debug(f"Controller on receiving command '{cmd[0]}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output (newlines removed): {output}")
 
+		if output:
+			return output
 
 	def defineCommand(self, cmd: str, func: Callable, info: str):
 		self.handlers[cmd] = (func, info)
 
+	def internalCall(self, s: str):
+		args = shlex.split(s)
+
+		OPTIONS = [
+				"--socket"
+			]
+		
+		msg = {}
+		t = len(args)
+		i = 0
+
+		while True:
+			if i >= t:
+				if "cmd" not in msg.keys():
+					log.warning("No Command Specified!")
+					return
+				break
+			
+			if args[i] in OPTIONS:
+				try:
+					msg[args[i].lstrip("--")] = args[i+1]
+				except IndexError:
+					log.warning(f"No argument passed for {args[i]}")
+					return
+				i += 2
+			else:
+				msg["cmd"] = args[i]
+				msg["args"] = args[i+1:]
+				break
+		
+		fmsg = json.loads(msg)
+		self.execCommand(fmsg)
 
 	def helpCommand(self) -> str:
 		commands = [f"{item[0]:<20} : {item[1][1]}" for item in self.handlers.items()]
@@ -122,7 +154,11 @@ class PiServer():
 help_msg = """
 <PiUI CLI interface>
 
-[COMMAND] [ARGS...]
+[OPTIONS] [COMMAND] [ARGS...]
+
+Options:
+
+--socket path/to/socket.sock
 
 Defined Commands:
 

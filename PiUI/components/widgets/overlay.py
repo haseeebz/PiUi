@@ -22,7 +22,7 @@ class PiOverlay(PiWidget):
 	def __init__(
 		self,
 		*,
-		name: str | Binding | Poll | None = None,
+		name: str | None = None,
 		height: int | Binding | Poll | None = None,
 		width: int | Binding | Poll | None = None,
 		hAlign: Alignment.H | None = None,

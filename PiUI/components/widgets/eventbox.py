@@ -18,7 +18,7 @@ class PiEventBox(PiWidget):
     def __init__(
         self,
         *,
-        name: str | Binding | Poll | None = None,
+        name: str | None = None,
         widget: PiWidget | Binding | None = None,
         height: int | Binding | Poll | None = None,
         width: int | Binding | Poll | None = None,

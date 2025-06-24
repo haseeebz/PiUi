@@ -13,7 +13,7 @@ class PiTextInput(PiWidget):
 	def __init__(
 		self,
 		*,
-		name: str | Binding | Poll | None = None,
+		name: str | None = None,
 		placeHolderText: str | Binding | Poll | None = None,
 		text: str | Binding | Poll | None = None,
 		onEnter: Callable | None = None,

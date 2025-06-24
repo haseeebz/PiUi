@@ -8,7 +8,7 @@ Don't need much explaining here. They are windows. Here are the current implemen
 The most basic window that you can initialize.
 
 ### Properties
-+ name : name of the window, used for referencing.
++ name : Name of the window, used for referencing.
 + position : (x, y) tuple of the position of the top left corner of the window on the screen.
 + size : (w, h) tuple of size of the window.
 + widget : The root widget

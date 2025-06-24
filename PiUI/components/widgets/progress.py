@@ -15,7 +15,7 @@ class PiProgress(PiWidget):
 	def __init__(
 		self,
 		*,
-		name: str | Binding | Poll | None = None,
+		name: str | None = None,
 		value: int | Binding | Poll | None = None,
 		orientation: Literal["horizontal", "vertical"] | Binding | Poll | None = "horizontal",
 		onChange: Callable | None = None,

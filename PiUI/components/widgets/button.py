@@ -14,8 +14,8 @@ class PiButton(PiWidget):
     def __init__(
         self,
         *,
-        name: str | Binding | Poll | None = None,
-        text: str | Binding | None = None,
+        name: str | None = None,
+        text: str | Binding | Poll | None = None,
         onClick: Callable | None = None,
         onRelease: Callable | None = None,
         height: int | Binding | Poll | None = None,

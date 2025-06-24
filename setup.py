@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "PiUI",
-    version = "0.1.0",
+    version = "0.1.1",
     packages = find_packages(),
     install_requires = [
         "PySide6",
@@ -10,6 +10,6 @@ setup(
         "colorlog"
     ],
     author = "haseeebz",
-    description = "Qt-Based UI Toolkit for making bars, widgets, lockScreens and menus for Linux",
+    description = "Qt-Based UI Toolkit for making bars, widgets, lockscreens and menus for Linux",
     scripts=['./PiUI/core/pi-ctl']
 )

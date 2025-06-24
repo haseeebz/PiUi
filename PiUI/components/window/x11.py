@@ -184,7 +184,6 @@ class XBackEnd(QFrame):
 				data=(32, [0, 0, 0, 0, 0])
 			)
 			self.display.send_event(self.win_id, ev, X.StructureNotifyMask)
-			self.display.flush()
 			
 		self.display.flush() 
 
@@ -200,8 +199,8 @@ class XBackEnd(QFrame):
 		
 	
 	def closeEvent(self, event):
-		self._afterHide()
 		super().closeEvent(event)
+		self._afterHide()
 		
 
 

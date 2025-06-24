@@ -17,7 +17,7 @@ class PiScrollBox(PiWidget):
     def __init__(
         self,
         *,
-        name: str | Binding | Poll | None = None,
+        name: str | None = None,
         orientation: Literal["horizontal", "vertical"] | None = "horizontal",
         widget: PiWidget | Binding | None = None,
         height: int | Binding | Poll | None = None,

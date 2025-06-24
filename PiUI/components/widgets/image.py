@@ -11,7 +11,7 @@ class PiImage(PiWidget):
 	def __init__(
 		self,
 		*,
-		name: str | Binding | Poll | None = None,
+		name: str | None = None,
 		path: str | Binding | Poll | None = None,
 		rounding: int = 0,
 		preserveAspectRatio: bool = True,

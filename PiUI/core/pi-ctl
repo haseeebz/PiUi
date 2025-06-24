@@ -1,38 +1,80 @@
 #!/usr/bin/env python3
 
+import socket, sys, json
 
-def communicate(cmd, client) -> str | None:
-    client.sendall(cmd.encode())
-    res = client.recv(1024)
-    if res:
-        return res.decode()
-    return None
-    
+def make_msg(args: list[str]):
+
+	OPTIONS = [
+			"--socket"
+		]
+	
+	if len(args) <= 1:
+		msg = {}
+		msg["cmd"] = "help"
+		return msg
+
+	args.pop(0)
+
+	msg = {}
+	t = len(args)
+	i = 0
+
+	while True:
+		if i >= t:
+			if "cmd" not in msg.keys():
+				print("No Command Specified!") 
+				sys.exit(0)
+			break
+		
+		if args[i] in OPTIONS:
+
+			try:
+				msg[args[i].lstrip("--")] = args[i+1]
+			except IndexError:
+				print(f"No argument passed for {args[i]}")
+				sys.exit(0)
+
+			i += 2
+			
+		else:
+			msg["cmd"] = args[i]
+			msg["args"] = args[i+1:]
+			break
+
+	return msg
+
+def communicate(msg, client) -> str | None:
+	formatted_msg = json.dumps(msg)
+	client.sendall(formatted_msg.encode())
+	res = client.recv(1024)
+	if res:
+		return res.decode()
+	return None
+
 def main():
-    import socket, sys
+	
+	msg = make_msg(sys.argv)
 
-    SOCKET_PATH = "/tmp/piui.sock"
-    
-    try:
-        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        client.connect(SOCKET_PATH)
-    except (ConnectionRefusedError, FileNotFoundError):
-        client.close()
-        print("Connection Error: Make sure PiUI is running. Also keep in mind that only one PiUI app can run at a time")
-        sys.exit(1)
+	if "socket" in msg.keys():
+		SOCKET = msg["socket"]
+	else:
+		SOCKET = "/tmp/piui.sock"
+	
+	
+	try:
+		client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		client.connect(SOCKET)
+	except (ConnectionRefusedError, FileNotFoundError):
+		client.close()
+		print(f"Could not connect to PiUI server binded at socket '{SOCKET}'.")
+		sys.exit(1)
 
-    if len(sys.argv) <= 1:
-        cmd = "help"
-        output = communicate(cmd, client)
-        print(output)
-        sys.exit(0)
-    
-    args = sys.argv[1:]
-    cmd = " ".join(args)
-    output = communicate(cmd, client)
-    if output:
-        print(output)
-    
+	output = communicate(msg, client)
 
-if __name__ == "__main__":
-    main()
+	if output:
+		print(output)
+
+	client.close()
+
+
+main()
