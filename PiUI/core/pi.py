@@ -16,7 +16,8 @@ from .tools import (
 	Shell,
 	Timer,
 	Debounce,
-	System
+	System,
+	Resource
 )
 
 from typing import Literal, Any
@@ -37,6 +38,7 @@ class Singleton():
 		self.binder = Binder()
 		self.poller = Poller()
 		self.screen = Screen(self._app)
+		self.resource = Resource(self._app)
 		self.system = System()
 
 		self.Shell = Shell
@@ -46,7 +48,6 @@ class Singleton():
 		
 		self.variables: dict[str, Any] = {}
 
-		self._stylesheets: list[str] = []
 		
 	def init(
 		self,
@@ -65,7 +66,7 @@ class Singleton():
 		self.server = PiServer(socket_path)
 
 		if len(stylesheets) > 0:
-			self.applyStylesheet(*stylesheets)
+			self.resource.applyStylesheet(*stylesheets)
 
 		# important bindings
 
@@ -89,25 +90,13 @@ class Singleton():
 
 		self.server.defineCommand(
 			"reload_style",
-			lambda: self.applyStylesheet(*self._stylesheets),
+			lambda: self.resource.applyStylesheet(*self.resource.stylesheets),
 			"Reload the Stylesheet/s. ARGS: None"
 		)
 		
 	def run(self):
 		self.server.run()
 		self._app.exec()
-
-	def applyStylesheet(self, *stylesheets: str):
-		style = ""
-		for stylesheet in stylesheets:
-			try:
-				with open(stylesheet) as file: 
-					style += file.read()
-			except FileNotFoundError:
-				self._intern_log.warning(f"StyleSheet Path '{stylesheet}' could not be resolved!")
-
-		self._stylesheets = stylesheets #type:ignore / will be caught above
-		self._app.setStyleSheet(style)
 
 	def quitApp(self):
 		self._intern_log.info("Quit command was sent to the server. Shutting down app.")

@@ -11,16 +11,10 @@ from PiUI.core import Pi
 
 ### init
 This is setups stuff like logs, server and stylesheet info.
-##### Arguments
 + logfile: The text file where you want your logs. Default: "~/.cache/PiUI/main.log",
 + loglevel: The level upto which you want to see your logs. Default = "info",
 + socket_path: The socket to which the app must bind. Useful if you want to run different instances (though it is not recomended). Default: "/tmp/piui.sock",
 + stylesheets: List of stylesheets you want to apply to the application. Default = []
-
-### applyStylesheet
-Obvious enough. Takes a bunch of stylesheet paths and applies it to the app.
-##### Arguments
-+ *stylesheets: path to stylesheets
 
 ### run
 Runs the app, put it at the end

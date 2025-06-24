@@ -28,7 +28,15 @@ source ./.venv/bin/activate
 pip install .
 
 ```
-
+You also need some system packages, install them as:
+For Ubuntu/Debian:
+```bash
+sudo apt install brightnessctl alsa-utils
+```
+For Arch
+```bash
+sudo pacman -S brightnessctl alsa-utils
+```
 ## How To
 
 Here is a basic example of a bar in PiUI:

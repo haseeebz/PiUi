@@ -6,3 +6,4 @@ from .shell import Shell
 from .debounce import Debounce
 from .screen import Screen
 from .system import System
+from .resource import Resource

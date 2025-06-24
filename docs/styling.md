@@ -3,9 +3,9 @@
 
 Qt based applications are styled using QSS but I recommend  using CSS with just the simple properties since it has better intellisense.
 
-You can style using the Pi object.
+You can style using the Pi.resource object.
 ```python
-Pi.applyStylesheet("path/to/style.css", "path/to/style2.css", ...)
+Pi.resource.applyStylesheet("path/to/style.css", "path/to/style2.css", ...)
 ```
 You can also set the style sheets in the Pi.init()
 
