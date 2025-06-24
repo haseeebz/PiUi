@@ -32,10 +32,11 @@ class PiBox(PiWidget):
         width: int | Binding | Poll | None = None,
         hAlign: Alignment.H | None = None,
         vAlign: Alignment.V | None = None,
-        state: str | Binding | Poll | None = None
+        state: str | Binding | Poll | None = None,
+        stretch: int = 1
         ):
 
-        super().__init__(QWidget, name, height, width, hAlign, vAlign, state)
+        super().__init__(QWidget, name, height, width, hAlign, vAlign, state, stretch)
         self._backend: QWidget
         
         enforceType(widgets, (list, Binding, type(None)), "widgets")
@@ -75,13 +76,13 @@ class PiBox(PiWidget):
             if widget.alignment:
                 layout.addWidget( 
                     widget._backend,
-                    stretch = 1,   # type: ignore # *
+                    stretch = widget.stretch,   # type: ignore # *
                     alignment = widget.alignment # type: ignore # None Handled
                     )
             else:
                 layout.addWidget( 
                     widget._backend,
-                    stretch = 1   # type: ignore 
+                    stretch = widget.stretch   # type: ignore 
                     )
 
     # * QLayout doesnt have stretch but its subclasses: QVboxLayout and QHboxLayout do have this parameter

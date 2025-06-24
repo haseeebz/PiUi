@@ -32,9 +32,10 @@ class PiEventBox(PiWidget):
         onMouseRelease: Callable | None = None,
         onMouseEnter: Callable | None = None,
         onMouseLeave: Callable | None = None,
+        stretch: int = 1
         ):
 
-        super().__init__(EventWidget, name, height, width, hAlign, vAlign, state)
+        super().__init__(EventWidget, name, height, width, hAlign, vAlign, state, stretch)
         self._backend: EventWidget
 
 

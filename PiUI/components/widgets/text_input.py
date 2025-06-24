@@ -23,9 +23,10 @@ class PiTextInput(PiWidget):
 		width: int | Binding | Poll | None = None,
 		hAlign: Alignment.H | None = None,
 		vAlign: Alignment.V | None = None,
-		state: str | Binding | Poll | None = None    
+		state: str | Binding | Poll | None = None,
+		stretch: int = 1 
 	):
-		super().__init__(InputWidget, name, height, width, hAlign, vAlign, state)
+		super().__init__(InputWidget, name, height, width, hAlign, vAlign, state, stretch)
 		self._backend: InputWidget
 
 		self.applyAttribute(

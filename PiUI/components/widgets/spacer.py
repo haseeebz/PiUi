@@ -18,8 +18,9 @@ class PiSpacer(PiWidget):
 		width: int | Binding | Poll | None = None,
 		hAlign: Alignment.H | None = None,
 		vAlign: Alignment.V | None = None,
-		state: str | Binding | Poll | None = None 
+		state: str | Binding | Poll | None = None,
+		stretch: int = 1
 		):
 
-		super().__init__(QFrame, name, height, width, hAlign, vAlign, state)
+		super().__init__(QFrame, name, height, width, hAlign, vAlign, state, stretch)
 		self._backend: QFrame

@@ -29,8 +29,9 @@ class PiOverlay(PiWidget):
 		vAlign: Alignment.V | None = None,
 		state: str | Binding | Poll | None = None,
 		widgets: list[Any] | Binding | None = None,
+		stretch: int = 1
 		):
-		super().__init__(QWidget, name, height, width, hAlign, vAlign, state)
+		super().__init__(QWidget, name, height, width, hAlign, vAlign, state, stretch)
 		self._backend: QWidget
 
 		self._backend.layoutBox = QStackedLayout()

@@ -26,8 +26,9 @@ class PiScrollBox(PiWidget):
         vAlign: Alignment.V | None = None,
         state: str | Binding | Poll | None = None,
         onScroll: Callable | None = None,
+        stretch: int = 1
     ):
-        super().__init__(ScrollWidget, name, height, width, hAlign, vAlign, state)
+        super().__init__(ScrollWidget, name, height, width, hAlign, vAlign, state, stretch)
         self._backend: ScrollWidget
 
         if orientation == "horizontal":

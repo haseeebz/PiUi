@@ -21,10 +21,11 @@ class PiLabel(PiWidget):
 		vAlign: Alignment.V | None = None,
 		xAlign: Alignment.H = Alignment.H.center,
 		yAlign: Alignment.V = Alignment.V.center,
-		state: str | Binding | Poll | None = None    
+		state: str | Binding | Poll | None = None,
+		stretch: int = 1  
 	):
 		
-		super().__init__(QLabel, name, height, width, hAlign, vAlign, state)
+		super().__init__(QLabel, name, height, width, hAlign, vAlign, state, stretch)
 		self._backend: QLabel
 
 		if text:
