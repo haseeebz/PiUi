@@ -48,11 +48,8 @@ class Resource():
 	def applyStylesheet(self, *stylesheets: str):
 		style = ""
 		for stylesheet in stylesheets:
-			try:
-				with open(stylesheet) as file: 
-					style += file.read()
-			except FileNotFoundError as e:
-				raise e(f"Stylesheet {stylesheet} could not be found!")
-
+			with open(stylesheet) as file: 
+				style += file.read()
+				
 		self.stylesheets = stylesheets #type:ignore / will be caught above
 		self._app.setStyleSheet(style)

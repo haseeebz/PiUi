@@ -6,8 +6,7 @@ from PiUI.core.tools.binder import Binding
 from PiUI.core.tools.poller import Poll
 from PiUI.core.tools import Alignment
 
-from PySide6.QtWidgets import QLabel, QHBoxLayout, QSizePolicy
-
+from PySide6.QtWidgets import QLabel
 
 class PiLabel(PiWidget):
 	def __init__(

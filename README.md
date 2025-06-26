@@ -1,21 +1,20 @@
 
-# PiUI
+# PiUI - Declarative System UI for Linux
 
+PiUI is a Qt-based widget toolkit designed for making system UI. It takes on a declarative approach and aims to make it easy to develop stuff like bars, panels, dashboards, menus, lockscreens and much more.
 
-PiUI is a Qt-based toolkit for creating system UI like bars, menus, lockscreens and much more for Linux. It's built on top of PySide6 and follows a declarative approach, allowing you to create UI by passing in properties. It's main goal is to make widget/ui creation as easy as possible for the user.
-
-Still under development. Currently only X11 is supported but Wayland support is on the (very) distant horizon.
 
 ## Features
 
-Current supported features that are worth mentioning include:
-+ Declarative UI
-+ GUI caveats such as transparency, image rounding, layouts etc.
-+ Custom commands the user can declare and call from the terminal.
-+ Proper Lockscreen (PAM support is on the way)
-+ Out of the box utilities such as binding, polling and system info.
+- Declarative widget system 
+- CLI controllable (`pi-ctl`) to hide/show windows on demand
+- Custom Commands (define them and call them via CLI)
+- Works with X11 (Wayland maybe late... maybe never)
+- Floating menus, bars, lockscreen support
+- Transparency, struts, differet widgets... all the GUI Caveats
+- Python logic + styling in one place
 
-## Installation
+## Quick Start
 
 You can install PiUI directly from the source by:
 
@@ -113,7 +112,7 @@ And the lockscreen:
 
 ## Contributing
 
-Contributions would be HIGHLY appreciated because I'm lost lol. For major changes, please open an issue first to discuss what you would like to change.
+Contributions would be highly appreciated. If you want to add something big, open an issue first.
 
 If you have any suggestions and improvements, please tell me!
 

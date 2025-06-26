@@ -81,7 +81,7 @@ class PiServer():
 
 		except Exception as e:
 			with self.lock:
-				log.critical(f"Controller socket error encountered: {str(e)}")
+				log.critical(f"Controller socket error encountered: {(e)}")
 		finally:
 			self.socket.close()       
 
@@ -106,8 +106,6 @@ class PiServer():
 		with self.lock:
 			log.debug(f"Controller on receiving command '{cmd[0]}', called the binded function '{self.handlers[cmd]}' with arguments: {arguments}. The function returned output (newlines removed): {output}")
 
-		if output:
-			return output
 
 	def defineCommand(self, cmd: str, func: Callable, info: str):
 		self.handlers[cmd] = (func, info)

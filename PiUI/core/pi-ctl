@@ -40,6 +40,9 @@ def make_msg(args: list[str]):
 			msg["cmd"] = args[i]
 			msg["args"] = args[i+1:]
 			break
+	
+	if "cmd" not in msg.keys():
+		msg["cmd"] = "help"
 
 	return msg
 

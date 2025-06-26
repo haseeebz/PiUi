@@ -11,7 +11,7 @@ class Poller():
 	def __init__(self):
 		self.polls = []
 	
-	def Poll(self, interval: int, *, func: Callable = None, shell: str = None, typeCastForShell = None):
+	def poll(self, interval: int, *, func: Callable = None, shell: str = None, typeCastForShell = None):
 		poll = Poll(interval, func= func, shell= shell, typeCastForShell= typeCastForShell)
 		self.polls.append(poll)
 		return poll
