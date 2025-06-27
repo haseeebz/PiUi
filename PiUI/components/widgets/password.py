@@ -36,7 +36,7 @@ class PiPasswordBox(PiWidget):
 		self._backend.setPasswordEcho()
 		
 		if onEnter:
-			self._backend.setEnterFunc(onEnter)
+			self._backend.setEnterFunc(lambda x: (self._backend.setText(""), onEnter(x)))
 
 		if onChange:
 			self._backend.setChangeFunc(onChange)

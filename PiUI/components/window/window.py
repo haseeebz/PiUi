@@ -85,10 +85,6 @@ class PiWindow():
 		self._backend.setLayout(layout)
 		self._backend.setContentsMargins(0,0,0,0)
 
-	def close(self):
-		self._backend.close()
-		log.info(f"PiWindow '{self._name}' hidden.")
-
 	def show(self):
 		self._backend.move(*self._pos)
 		self._backend.show()

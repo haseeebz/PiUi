@@ -33,7 +33,6 @@ class PiLabel(PiWidget):
 				text
 			)
 		
-
 		self._backend.setAlignment(xAlign.value | yAlign.value)
 		
 
